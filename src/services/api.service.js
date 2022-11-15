@@ -6,8 +6,7 @@ const paymentCollectionRef = collection(db, "payment");
 const attendanceCollectionRef = collection(db, "attendance");
 
 /*Attendance Collection*/
-export const createAttendance = async (email, date, status) => {
-    const attendance = { email, date, status };
+export const createAttendance = async (attendance) => {
     await addDoc(attendanceCollectionRef, attendance)
 }
 

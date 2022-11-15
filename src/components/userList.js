@@ -5,7 +5,6 @@ import * as apiService from '../services/api.service';
 const UserList = () => {
     const [users, setUsers] = useState([]);
     const [allUsers, setAllUsers] = useState([]);
-    const [newName, setNewName] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {

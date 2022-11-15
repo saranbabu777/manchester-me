@@ -38,22 +38,17 @@ const Attendance = (props) => {
 
     const daysByWeek = () => {
         let i = 0;
-        const newArr = [];
+        const weeks = [];
         if (daysOfMonth.length > 0) {
             const firstDay = daysOfMonth[0].getDay();
-            let firstArry = [];
-            for (let j = 0; j < firstDay; j++) {
-                firstArry.push(undefined);
-            }
-            firstArry = [...firstArry, ...daysOfMonth.slice(i, ((i + 7) - firstDay))];
-            newArr.push(firstArry);
+            weeks.push([...Array(firstDay).fill(), ...daysOfMonth.slice(i, ((i + 7) - firstDay))]);
             i = 7 - firstDay;
             while (i < daysOfMonth.length) {
-                newArr.push(daysOfMonth.slice(i, i + 7))
+                weeks.push(daysOfMonth.slice(i, i + 7))
                 i += 7;
             }
         }
-        return newArr;
+        return weeks;
     }
 
     const present = attendance.filter(x => x.status === 'IN').map(x => x.date.getDate());

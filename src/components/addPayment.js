@@ -18,8 +18,6 @@ const monthList = [
 ]
 
 const AddPayment = () => {
-    const [newSum, setNewSum] = useState([]);
-    const [newEmail, setNewEmail] = useState([]);
     const [paymentForm, setPaymentForm] = useState({
         email: "",
         date: new Date(),
