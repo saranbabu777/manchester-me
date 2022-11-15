@@ -11,11 +11,7 @@ export const createAttendance = async (email, date, status) => {
     await addDoc(attendanceCollectionRef, attendance)
 }
 
-export const filterAttendance = async (email, startDate, endDate) => {
-    let start = new Date(startDate);
-    let end = new Date(endDate);
-    // end.setDate(end.getDate() + 1);
-    // console.log('att of ', email, start, end)
+export const filterAttendance = async (email, start, end) => {
     const q = query(attendanceCollectionRef, where("email", "==", email), where("date", ">=", start), where("date", "<", end))
     const data = await getDocs(q);
     const parsedAttendance = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => ({ ...doc, date: doc.date.toDate() }));
@@ -36,8 +32,8 @@ export const filterPayment = async (email, month, year) => {
 }
 
 /*Users Collection*/
-export const createUser = async (name, email) => {
-    await addDoc(usersCollectionRef, { name, email })
+export const createUser = async (user) => {
+    await addDoc(usersCollectionRef, user)
 }
 
 export const updateUser = async (id, name) => {

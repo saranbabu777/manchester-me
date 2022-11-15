@@ -3,11 +3,21 @@ import * as apiService from '../services/api.service';
 
 const Attendance = (props) => {
     const [attendance, setAttendance] = useState([]);
+    const [daysOfMonth, setDaysOfMonth] = useState([]);
+
+    useEffect(() => {
+        const now = new Date();
+        const days = getAllDaysInMonth(now.getFullYear(), now.getMonth())
+        setDaysOfMonth((prev) => {
+            return days;
+        })
+    }, [])
 
     useEffect(() => {
         const getAttendanceDetails = async () => {
-            const monthStartDate = '2022-11-01';
-            const monthEndDate = '2022-11-30';
+            const date = new Date(), y = date.getFullYear(), m = date.getMonth();
+            const monthStartDate = new Date(y, m, 1);
+            const monthEndDate = new Date(y, m + 1, 0);
             const data = await apiService.filterAttendance(props.email, monthStartDate, monthEndDate);
             setAttendance((prev) => {
                 return data;
@@ -16,17 +26,69 @@ const Attendance = (props) => {
         getAttendanceDetails();
     }, [props.email])
 
+    const getAllDaysInMonth = (year, month) => {
+        const date = new Date(year, month, 1);
+        const dates = [];
+        while (date.getMonth() === month) {
+            dates.push(new Date(date));
+            date.setDate(date.getDate() + 1);
+        }
+        return dates;
+    }
+
+    const daysByWeek = () => {
+        let i = 0;
+        const newArr = [];
+        if (daysOfMonth.length > 0) {
+            const firstDay = daysOfMonth[0].getDay();
+            let firstArry = [];
+            for (let j = 0; j < firstDay; j++) {
+                firstArry.push(undefined);
+            }
+            firstArry = [...firstArry, ...daysOfMonth.slice(i, ((i + 7) - firstDay))];
+            newArr.push(firstArry);
+            i = 7 - firstDay;
+            while (i < daysOfMonth.length) {
+                newArr.push(daysOfMonth.slice(i, i + 7))
+                i += 7;
+            }
+        }
+        return newArr;
+    }
+
+    const present = attendance.filter(x => x.status === 'IN').map(x => x.date.getDate());
+
     return (
         <>
             <h1>attendance of {props.email}</h1>
-            {
-                attendance.map((row, key) => {
-                    return <div key={"attendance" + key}>
-                        <h1>{row.date.toDateString()}</h1>
-                        <h2>{row.status}</h2>
-                    </div>
-                })
-            }
+            <section className='grid'>
+                <header>
+                    <div className="col">Su</div>
+                    <div className="col">Mo</div>
+                    <div className="col">Tu</div>
+                    <div className="col">We</div>
+                    <div className="col">Th</div>
+                    <div className="col">Fr</div>
+                    <div className="col">Sa</div>
+                </header>
+                {
+                    daysByWeek().map((week, key) => {
+                        return (
+                            <div className='row' key={"week" + key}>
+                                {
+                                    week.map((day, dayKey) => {
+                                        return (
+                                            <div className={`col ` + (day ? (present.includes(day.getDate()) ? `yes ` : `no `) : ` disable`)} key={"day" + dayKey + "week" + key}>
+                                                {day ? day.getDate() : null}
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        )
+                    })
+                }
+            </section>
         </>
     )
 }

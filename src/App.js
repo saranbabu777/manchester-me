@@ -18,11 +18,6 @@ function App() {
           </Link>
         </div>
         <div>
-          <Link to="/add-user">
-            Create User
-          </Link>
-        </div>
-        <div>
           <Link to="/add-payment">
             Add payment
           </Link>

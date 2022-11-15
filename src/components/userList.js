@@ -4,6 +4,7 @@ import * as apiService from '../services/api.service';
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
+    const [allUsers, setAllUsers] = useState([]);
     const [newName, setNewName] = useState([]);
     const navigate = useNavigate();
 
@@ -11,6 +12,9 @@ const UserList = () => {
 
         const getUsers = async () => {
             const data = await apiService.getUsers();
+            setAllUsers((prev) => {
+                return data;
+            });
             setUsers((prev) => {
                 return data;
             });
@@ -19,10 +23,10 @@ const UserList = () => {
 
     }, [])
 
-    const searchUsers = async () => {
-        const data = await apiService.searchUsers(newName);
+    const searchUsers = async (search) => {
+        const filteredUsers = allUsers.filter(x => x.name.toLowerCase().includes(search.toLowerCase()))
         setUsers((prev) => {
-            return data;
+            return filteredUsers;
         });
     }
 
@@ -30,10 +34,13 @@ const UserList = () => {
         navigate(`/user-details/${email}`);
     }
 
+    const addUser = () => {
+        navigate(`/add-user`);
+    }
+
     return (
         <>
-            <input type='text' placeholder='Name' onChange={(e) => { setNewName(e.target.value); }} />
-            <button onClick={searchUsers}>Search User</button>
+            <input type='text' placeholder='Search User' onChange={(e) => { searchUsers(e.target.value); }} />
             {
                 users.map((user, key) => {
                     return <div key={"user" + key}>
@@ -44,6 +51,7 @@ const UserList = () => {
                     </div>
                 })
             }
+            <button type='button' onClick={addUser}>Add Staff</button>
         </>
     )
 }

@@ -15,7 +15,6 @@ const UserDetails = () => {
     return (
         <>
             <Attendance email={email} />
-            payment details
             <PaymentDetails email={email} />
         </>
     )
