@@ -1,0 +1,37 @@
+section.grid {
+  display: table;
+  width: 100%;
+}
+
+section.grid>* {
+  display: table-row;
+}
+
+section.grid .col {
+  display: table-cell;
+}
+
+section.calendar-view {
+  .col {
+    text-align: center;
+    background: #5f5d5d;
+    color: white;
+    cursor: pointer;
+  }
+
+  .col.yes {
+    background-color: #30741a;
+  }
+
+  .col.no {
+    background-color: #e83153;
+  }
+
+  .col.disable {
+    cursor: default;
+  }
+}
+
+.payment-grid {
+  width: 50%;
+}
