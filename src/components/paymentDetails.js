@@ -58,18 +58,18 @@ const PaymentDetails = (props) => {
             <form>
                 <select value={formValue.selectedYear} onChange={(e) => { handleChange({ selectedYear: e.target.value }) }}>
                     {
-                        yearList.map(yr => {
+                        yearList.map((yr, key) => {
                             return (
-                                <option value={yr}>{yr}</option>
+                                <option key={`yr${key}`} value={yr}>{yr}</option>
                             )
                         })
                     }
                 </select>
                 <select value={formValue.selectedMonth} onChange={(e) => { handleChange({ selectedMonth: e.target.value }) }}>
                     {
-                        monthList.map(mon => {
+                        monthList.map((mon, key) => {
                             return (
-                                <option value={mon.value}>{mon.label}</option>
+                                <option key={`mon${key}`} value={mon.value}>{mon.label}</option>
                             )
                         })
                     }

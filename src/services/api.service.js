@@ -19,8 +19,7 @@ export const filterAttendance = async (email, start, end) => {
 }
 
 /*Payment Collection*/
-export const createPayment = async (email, date, type, sum, mode, forMonth, forYear) => {
-    const payment = { email, date, type, sum, mode, forMonth, forYear }
+export const createPayment = async (payment) => {
     await addDoc(paymentCollectionRef, payment)
 }
 
