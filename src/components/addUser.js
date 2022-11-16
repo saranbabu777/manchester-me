@@ -8,17 +8,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { styled } from "@mui/material";
+import { FormControl, InputLabel } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
-const FormControl = styled('div')(
-    ({ theme }) => `
-    flex: 1;
-    margin:10px;
-  `,
-);
 
 const AddUser = () => {
     const [user, setUser] = useState({
@@ -61,16 +55,19 @@ const AddUser = () => {
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </FormControl>
-                        <Select
-                            labelId="role-label"
-                            id="role"
-                            value={user.role}
-                            label="Role"
-                            onChange={(event) => handleUserForm({ role: event.target.value })}
-                        >
-                            <MenuItem value='admin'>Admin</MenuItem>
-                            <MenuItem value='staff'>Staff</MenuItem>
-                        </Select>
+                        <FormControl sx={{ minWidth: 120 }}>
+                            <InputLabel id="role-label">Role</InputLabel>
+                            <Select
+                                labelId="role-label"
+                                id="role"
+                                value={user.role}
+                                label="Role"
+                                onChange={(event) => handleUserForm({ role: event.target.value })}
+                            >
+                                <MenuItem value='admin'>Admin</MenuItem>
+                                <MenuItem value='staff'>Staff</MenuItem>
+                            </Select>
+                        </FormControl>
                         <FormControl>
                             <TextField label="Gross Salary" variant="outlined" value={user.grossSalary} onChange={(e) => { handleUserForm({ grossSalary: e.target.value }); }} />
                         </FormControl>

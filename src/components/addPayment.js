@@ -8,17 +8,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { styled } from "@mui/material";
+import { FormControl, InputLabel } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-
-const FormControl = styled('div')(
-    ({ theme }) => `
-    flex: 1;
-    margin:10px;
-  `,
-);
 
 const yearList = [2022, 2023]
 const monthList = [
@@ -68,59 +61,71 @@ const AddPayment = () => {
                         <FormControl>
                             <TextField label="Email" variant="outlined" value={paymentForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
                         </FormControl>
-                        <Select
-                            labelId="type-label"
-                            id="type"
-                            value={paymentForm.type}
-                            label="Type"
-                            onChange={(e) => { handleChange({ type: e.target.value }); }}
-                        >
-                            <MenuItem value='salary'>Salary</MenuItem>
-                            <MenuItem value='advance'>Advance</MenuItem>
-                        </Select>
+                        <FormControl sx={{ minWidth: 120 }}>
+                            <InputLabel id="type-label">Type</InputLabel>
+                            <Select
+                                labelId="type-label"
+                                id="type"
+                                value={paymentForm.type}
+                                label="Type"
+                                onChange={(e) => { handleChange({ type: e.target.value }); }}
+                            >
+                                <MenuItem value='salary'>Salary</MenuItem>
+                                <MenuItem value='advance'>Advance</MenuItem>
+                            </Select>
+                        </FormControl>
                         <FormControl>
                             <TextField label="Amount" variant="outlined" value={paymentForm.sum} onChange={(e) => { handleChange({ sum: e.target.value }); }} />
                         </FormControl>
-                        <Select
-                            labelId="mode-label"
-                            id="mode"
-                            value={paymentForm.mode}
-                            label="Mode"
-                            onChange={(e) => { handleChange({ mode: e.target.value }); }}
-                        >
-                            <MenuItem value='cash'>Cash</MenuItem>
-                            <MenuItem value='online'>Online</MenuItem>
-                        </Select>
-                        <Select
-                            labelId="forYear-label"
-                            id="forYear"
-                            value={paymentForm.forYear}
-                            label="For Year"
-                            onChange={(e) => { handleChange({ forYear: e.target.value }); }}
-                        >
-                            {
-                                yearList.map((yr, key) => {
-                                    return (
-                                        <MenuItem key={`yr${key}`} value={yr}>{yr}</MenuItem>
-                                    )
-                                })
-                            }
-                        </Select>
-                        <Select
-                            labelId="forMonth-label"
-                            id="forMonth"
-                            value={paymentForm.forMonth}
-                            label="For Month"
-                            onChange={(e) => { handleChange({ forMonth: e.target.value }); }}
-                        >
-                            {
-                                monthList.map((mon, key) => {
-                                    return (
-                                        <MenuItem key={`mon${key}`} value={mon.value}>{mon.label}</MenuItem>
-                                    )
-                                })
-                            }
-                        </Select>
+                        <FormControl sx={{ minWidth: 120 }}>
+                            <InputLabel id="mode-label">Mode</InputLabel>
+                            <Select
+                                labelId="mode-label"
+                                id="mode"
+                                value={paymentForm.mode}
+                                label="Mode"
+                                onChange={(e) => { handleChange({ mode: e.target.value }); }}
+                            >
+                                <MenuItem value='cash'>Cash</MenuItem>
+                                <MenuItem value='online'>Online</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ minWidth: 120 }}>
+                            <InputLabel id="forYear-label">Year</InputLabel>
+                            <Select
+                                labelId="forYear-label"
+                                id="forYear"
+                                value={paymentForm.forYear}
+                                label="For Year"
+                                onChange={(e) => { handleChange({ forYear: e.target.value }); }}
+                            >
+                                {
+                                    yearList.map((yr, key) => {
+                                        return (
+                                            <MenuItem key={`yr${key}`} value={yr}>{yr}</MenuItem>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        <FormControl sx={{ minWidth: 120 }}>
+                            <InputLabel id="forMonth-label">Month</InputLabel>
+                            <Select
+                                labelId="forMonth-label"
+                                id="forMonth"
+                                value={paymentForm.forMonth}
+                                label="For Month"
+                                onChange={(e) => { handleChange({ forMonth: e.target.value }); }}
+                            >
+                                {
+                                    monthList.map((mon, key) => {
+                                        return (
+                                            <MenuItem key={`mon${key}`} value={mon.value}>{mon.label}</MenuItem>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
                     </CardContent>
                     <CardActions>
                         <Button variant="contained" onClick={createPayment}>Add Payment</Button>

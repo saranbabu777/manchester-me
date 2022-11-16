@@ -3,14 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import * as apiService from '../services/api.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { styled } from "@mui/material";
-
-const FormControl = styled('div')(
-    ({ theme }) => `
-    flex: 1;
-    margin:10px;
-  `,
-);
+import { FormControl } from "@mui/material";
 
 const UserList = () => {
     const [users, setUsers] = useState([]);

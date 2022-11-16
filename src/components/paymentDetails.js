@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import * as apiService from '../services/api.service';
+import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
+import { InputLabel } from '@mui/material';
 
 const yearList = [2022, 2023]
 const monthList = [
@@ -59,36 +61,42 @@ const PaymentDetails = (props) => {
         <>
             <h1>Payments of {props.email}</h1>
             <form>
-                <Select
-                    labelId="year-label"
-                    id="year"
-                    value={formValue.selectedYear}
-                    label="Year"
-                    onChange={(e) => { handleChange({ selectedYear: Number(e.target.value) }); }}
-                >
-                    {
-                        yearList.map((yr, key) => {
-                            return (
-                                <MenuItem key={`yr${key}`} value={yr}>{yr}</MenuItem>
-                            )
-                        })
-                    }
-                </Select>
-                <Select
-                    labelId="month-label"
-                    id="month"
-                    value={formValue.selectedMonth}
-                    label="Month"
-                    onChange={(e) => { handleChange({ selectedMonth: Number(e.target.value) }); }}
-                >
-                    {
-                        monthList.map((mon, key) => {
-                            return (
-                                <MenuItem key={`mon${key}`} value={mon.value}>{mon.label}</MenuItem>
-                            )
-                        })
-                    }
-                </Select>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel id="year-label">Year</InputLabel>
+                    <Select
+                        labelId="year-label"
+                        id="year"
+                        value={formValue.selectedYear}
+                        label="Year"
+                        onChange={(e) => { handleChange({ selectedYear: Number(e.target.value) }); }}
+                    >
+                        {
+                            yearList.map((yr, key) => {
+                                return (
+                                    <MenuItem key={`yr${key}`} value={yr}>{yr}</MenuItem>
+                                )
+                            })
+                        }
+                    </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel id="month-label">Month</InputLabel>
+                    <Select
+                        labelId="month-label"
+                        id="month"
+                        value={formValue.selectedMonth}
+                        label="Month"
+                        onChange={(e) => { handleChange({ selectedMonth: Number(e.target.value) }); }}
+                    >
+                        {
+                            monthList.map((mon, key) => {
+                                return (
+                                    <MenuItem key={`mon${key}`} value={mon.value}>{mon.label}</MenuItem>
+                                )
+                            })
+                        }
+                    </Select>
+                </FormControl>
                 <Button variant="contained" onClick={changePaymentDetails}>Get Payment Details</Button>
             </form>
             <section className='grid payment-grid'>
