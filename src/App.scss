@@ -35,3 +35,29 @@ section.calendar-view {
 .payment-grid {
   width: 50%;
 }
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  height: calc(100vh - 84px);
+  overflow: auto;
+
+  .user-block {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px;
+    color: white;
+    background: #4560a4;
+    cursor: pointer;
+  }
+
+  .add-user-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+}

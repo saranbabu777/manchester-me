@@ -4,6 +4,7 @@ import * as apiService from '../services/api.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { FormControl } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
@@ -41,22 +42,20 @@ const UserList = () => {
     }
 
     return (
-        <>
+        <div className='user-list'>
             <FormControl>
                 <TextField label="Search User" variant="outlined" onChange={(e) => { searchUsers(e.target.value); }} />
             </FormControl>
             {
                 users.map((user, key) => {
-                    return <div key={"user" + key}>
-                        <h1>{user.name}</h1>
-                        <h2>{user.email}</h2>
-                        <Button variant="contained" onClick={() => { apiService.deleteUser(user.id); }}>Delete</Button>
-                        <Button variant="contained" onClick={() => { viewUser(user.email); }}>View</Button>
+                    return <div className='user-block' key={"user" + key} onClick={() => { viewUser(user.email); }}>
+                        <p>{user.name}</p>
+                        <DeleteIcon onClick={(e) => { e.stopPropagation(); apiService.deleteUser(user.id); }} />
                     </div>
                 })
             }
-            <Button variant="contained" onClick={addUser}>Add Staff</Button>
-        </>
+            <Button className='add-user-btn' variant="contained" onClick={addUser}>Add Staff</Button>
+        </div>
     )
 }
 

@@ -16,15 +16,17 @@ function App() {
     <div className="App">
       <ThemeProvider theme={darkTheme}>
         <Header />
-        <Routes>
-          <Route exact path="/" element={<UserList />} />
-          <Route path="/add-user" element={<AddUser />} />
-          <Route path="/user-details/:email" element={<UserDetails />} />
-          <Route path="/add-payment" element={<AddPayment />} />
-          <Route path="/attendance" element={<Attendance />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/payment-details" element={<PaymentDetails />} />
-        </Routes>
+        <div className='main-content'>
+          <Routes>
+            <Route exact path="/" element={<UserList />} />
+            <Route path="/add-user" element={<AddUser />} />
+            <Route path="/user-details/:email" element={<UserDetails />} />
+            <Route path="/add-payment" element={<AddPayment />} />
+            <Route path="/attendance" element={<Attendance />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/payment-details" element={<PaymentDetails />} />
+          </Routes>
+        </div>
       </ThemeProvider>
     </div>
   );
