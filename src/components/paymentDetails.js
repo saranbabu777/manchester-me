@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import * as apiService from '../services/api.service';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
 
 const yearList = [2022, 2023]
 const monthList = [
@@ -56,25 +59,37 @@ const PaymentDetails = (props) => {
         <>
             <h1>Payments of {props.email}</h1>
             <form>
-                <select value={formValue.selectedYear} onChange={(e) => { handleChange({ selectedYear: e.target.value }) }}>
+                <Select
+                    labelId="year-label"
+                    id="year"
+                    value={formValue.selectedYear}
+                    label="Year"
+                    onChange={(e) => { handleChange({ selectedYear: Number(e.target.value) }); }}
+                >
                     {
                         yearList.map((yr, key) => {
                             return (
-                                <option key={`yr${key}`} value={yr}>{yr}</option>
+                                <MenuItem key={`yr${key}`} value={yr}>{yr}</MenuItem>
                             )
                         })
                     }
-                </select>
-                <select value={formValue.selectedMonth} onChange={(e) => { handleChange({ selectedMonth: e.target.value }) }}>
+                </Select>
+                <Select
+                    labelId="month-label"
+                    id="month"
+                    value={formValue.selectedMonth}
+                    label="Month"
+                    onChange={(e) => { handleChange({ selectedMonth: Number(e.target.value) }); }}
+                >
                     {
                         monthList.map((mon, key) => {
                             return (
-                                <option key={`mon${key}`} value={mon.value}>{mon.label}</option>
+                                <MenuItem key={`mon${key}`} value={mon.value}>{mon.label}</MenuItem>
                             )
                         })
                     }
-                </select>
-                <button type='button' onClick={changePaymentDetails}>Get Payment Details</button>
+                </Select>
+                <Button variant="contained" onClick={changePaymentDetails}>Get Payment Details</Button>
             </form>
             <section className='grid payment-grid'>
                 <header>

@@ -1,5 +1,24 @@
 import React, { useState } from 'react';
 import * as apiService from '../services/api.service';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import { styled } from "@mui/material";
+import Typography from '@mui/material/Typography';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
+const FormControl = styled('div')(
+    ({ theme }) => `
+    flex: 1;
+    margin:10px;
+  `,
+);
 
 const yearList = [2022, 2023]
 const monthList = [
@@ -40,40 +59,74 @@ const AddPayment = () => {
 
     return (
         <>
-            add payment
-            <input type='text' placeholder='Email' onChange={(e) => { handleChange({ email: e.target.value }); }} />
-            <select onChange={(e) => { handleChange({ type: e.target.value }); }}>
-                <option>Select Type</option>
-                <option value='salary'>Salary</option>
-                <option value='advance'>Advance</option>
-            </select>
-            <input type='text' placeholder='Amount' onChange={(e) => { handleChange({ sum: e.target.value }); }} />
-            <select onChange={(e) => { handleChange({ mode: e.target.value }); }}>
-                <option>Select Mode</option>
-                <option value='cash'>Cash</option>
-                <option value='online'>Online</option>
-            </select>
-            <select onChange={(e) => { handleChange({ forYear: Number(e.target.value) }) }}>
-                <option>Select Year</option>
-                {
-                    yearList.map((yr, key) => {
-                        return (
-                            <option key={`yr${key}`} value={yr}>{yr}</option>
-                        )
-                    })
-                }
-            </select>
-            <select onChange={(e) => { handleChange({ forMonth: e.target.value }) }}>
-                <option>Select Month</option>
-                {
-                    monthList.map((mon, key) => {
-                        return (
-                            <option key={`mon${key}`} value={mon.value}>{mon.label}</option>
-                        )
-                    })
-                }
-            </select>
-            <button onClick={createPayment}>Add Payment</button>
+            <Card sx={{ minWidth: 275 }}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                            Add new payment
+                        </Typography>
+                        <FormControl>
+                            <TextField label="Email" variant="outlined" value={paymentForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
+                        </FormControl>
+                        <Select
+                            labelId="type-label"
+                            id="type"
+                            value={paymentForm.type}
+                            label="Type"
+                            onChange={(e) => { handleChange({ type: e.target.value }); }}
+                        >
+                            <MenuItem value='salary'>Salary</MenuItem>
+                            <MenuItem value='advance'>Advance</MenuItem>
+                        </Select>
+                        <FormControl>
+                            <TextField label="Amount" variant="outlined" value={paymentForm.sum} onChange={(e) => { handleChange({ sum: e.target.value }); }} />
+                        </FormControl>
+                        <Select
+                            labelId="mode-label"
+                            id="mode"
+                            value={paymentForm.mode}
+                            label="Mode"
+                            onChange={(e) => { handleChange({ mode: e.target.value }); }}
+                        >
+                            <MenuItem value='cash'>Cash</MenuItem>
+                            <MenuItem value='online'>Online</MenuItem>
+                        </Select>
+                        <Select
+                            labelId="forYear-label"
+                            id="forYear"
+                            value={paymentForm.forYear}
+                            label="For Year"
+                            onChange={(e) => { handleChange({ forYear: e.target.value }); }}
+                        >
+                            {
+                                yearList.map((yr, key) => {
+                                    return (
+                                        <MenuItem key={`yr${key}`} value={yr}>{yr}</MenuItem>
+                                    )
+                                })
+                            }
+                        </Select>
+                        <Select
+                            labelId="forMonth-label"
+                            id="forMonth"
+                            value={paymentForm.forMonth}
+                            label="For Month"
+                            onChange={(e) => { handleChange({ forMonth: e.target.value }); }}
+                        >
+                            {
+                                monthList.map((mon, key) => {
+                                    return (
+                                        <MenuItem key={`mon${key}`} value={mon.value}>{mon.label}</MenuItem>
+                                    )
+                                })
+                            }
+                        </Select>
+                    </CardContent>
+                    <CardActions>
+                        <Button variant="contained" onClick={createPayment}>Add Payment</Button>
+                    </CardActions>
+                </LocalizationProvider>
+            </Card>
         </>
     )
 }

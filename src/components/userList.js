@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as apiService from '../services/api.service';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { styled } from "@mui/material";
+
+const FormControl = styled('div')(
+    ({ theme }) => `
+    flex: 1;
+    margin:10px;
+  `,
+);
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
@@ -39,18 +49,20 @@ const UserList = () => {
 
     return (
         <>
-            <input type='text' placeholder='Search User' onChange={(e) => { searchUsers(e.target.value); }} />
+            <FormControl>
+                <TextField label="Search User" variant="outlined" onChange={(e) => { searchUsers(e.target.value); }} />
+            </FormControl>
             {
                 users.map((user, key) => {
                     return <div key={"user" + key}>
                         <h1>{user.name}</h1>
                         <h2>{user.email}</h2>
-                        <button onClick={() => { apiService.deleteUser(user.id); }}>Delete</button>
-                        <button onClick={() => { viewUser(user.email); }}>View</button>
+                        <Button variant="contained" onClick={() => { apiService.deleteUser(user.id); }}>Delete</Button>
+                        <Button variant="contained" onClick={() => { viewUser(user.email); }}>View</Button>
                     </div>
                 })
             }
-            <button type='button' onClick={addUser}>Add Staff</button>
+            <Button variant="contained" onClick={addUser}>Add Staff</Button>
         </>
     )
 }
