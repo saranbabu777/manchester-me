@@ -55,7 +55,6 @@ const Attendance = (props) => {
 
     return (
         <>
-            <h1>attendance of {props.email}</h1>
             <section className='grid calendar-view'>
                 <header>
                     <div className="col">Su</div>

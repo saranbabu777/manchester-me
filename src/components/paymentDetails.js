@@ -59,9 +59,8 @@ const PaymentDetails = (props) => {
 
     return (
         <>
-            <h1>Payments of {props.email}</h1>
-            <form>
-                <FormControl sx={{ minWidth: 120 }}>
+            <form className='payment-details-form'>
+                <FormControl className='form-field' sx={{ minWidth: 120 }}>
                     <InputLabel id="year-label">Year</InputLabel>
                     <Select
                         labelId="year-label"
@@ -79,7 +78,7 @@ const PaymentDetails = (props) => {
                         }
                     </Select>
                 </FormControl>
-                <FormControl sx={{ minWidth: 120 }}>
+                <FormControl className='form-field' sx={{ minWidth: 120 }}>
                     <InputLabel id="month-label">Month</InputLabel>
                     <Select
                         labelId="month-label"
