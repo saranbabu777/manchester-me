@@ -24,7 +24,7 @@ const UserDetails = () => {
             <Card sx={{ minWidth: 275 }}>
                 <CardContent>
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        {email}
+                        Summary of {email}
                     </Typography>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={selectedTab} onChange={handleTabChange} aria-label="user details">

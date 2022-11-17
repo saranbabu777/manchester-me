@@ -2,9 +2,8 @@ import React from 'react';
 import { Box, Divider, List, ListItem, ListItemButton } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { Link } from "react-router-dom";
+import { Dashboard, Login, PlaylistAdd, PlusOne } from '@mui/icons-material';
 
 const LeftMenu = (props) => {
     return (
@@ -16,11 +15,24 @@ const LeftMenu = (props) => {
                 onKeyDown={props.toggleDrawer(false)}
             >
                 <List>
+                    <ListItem key='Login' disablePadding>
+                        <Link to="/login">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Login />
+                                </ListItemIcon>
+                                <ListItemText primary='Login' />
+                            </ListItemButton>
+                        </Link>
+                    </ListItem>
+                </List>
+                <Divider />
+                <List>
                     <ListItem key='User List' disablePadding>
                         <Link to="/">
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <MailIcon />
+                                    <PlaylistAdd />
                                 </ListItemIcon>
                                 <ListItemText primary='User List' />
                             </ListItemButton>
@@ -33,7 +45,7 @@ const LeftMenu = (props) => {
                         <Link to="/add-payment">
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <MailIcon />
+                                    <PlusOne />
                                 </ListItemIcon>
                                 <ListItemText primary='Add payment' />
                             </ListItemButton>
@@ -42,13 +54,13 @@ const LeftMenu = (props) => {
                 </List>
                 <Divider />
                 <List>
-                    <ListItem key='Dashboard' disablePadding>
+                    <ListItem key='Staff Dashboard' disablePadding>
                         <Link to="/dashboard">
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <MailIcon />
+                                    <Dashboard />
                                 </ListItemIcon>
-                                <ListItemText primary='Dashboard' />
+                                <ListItemText primary='Staff Dashboard' />
                             </ListItemButton>
                         </Link>
                     </ListItem>

@@ -129,3 +129,12 @@ section.calendar-view {
     margin: 10px 0 !important;
   }
 }
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+
+  .form-field {
+    margin: 10px 0 !important;
+  }
+}

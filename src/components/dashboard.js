@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as apiService from '../services/api.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,13 @@ const Dashboard = () => {
         date: new Date(),
         status: ""
     });
+
+    useEffect(() => {
+        const userName = localStorage.getItem('userName');
+        setAttendanceForm((prev) => {
+            return { ...prev, email: userName ? userName : "" };
+        });
+    }, [])
 
     const handleChange = (change) => {
         setAttendanceForm(prev => {
@@ -31,12 +38,9 @@ const Dashboard = () => {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <CardContent>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Hello, UserName
+                            Hello, {attendanceForm.email}
                         </Typography>
                         <div className='dashboard-form'>
-                            <FormControl className='form-field'>
-                                <TextField label="Email" variant="outlined" value={attendanceForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
-                            </FormControl>
                             <FormControl className='form-field' sx={{ minWidth: 120 }}>
                                 <InputLabel id="status-label">Status</InputLabel>
                                 <Select

@@ -10,6 +10,7 @@ import UserDetails from './components/userDetails';
 import Header from './components/header';
 import { ThemeProvider } from '@mui/material';
 import { darkTheme } from './theme';
+import Login from './components/login';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <div className='main-content'>
           <Routes>
             <Route exact path="/" element={<UserList />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/add-user" element={<AddUser />} />
             <Route path="/user-details/:email" element={<UserDetails />} />
             <Route path="/add-payment" element={<AddPayment />} />
