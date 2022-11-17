@@ -29,6 +29,11 @@ const AddUser = () => {
         })
     }
 
+    const saveUser = () => {
+        const newUser = { ...user, name: user.name.toLowerCase() };
+        apiService.createUser(newUser);
+    }
+
     return (
         <>
             <Card sx={{ minWidth: 275 }}>
@@ -75,7 +80,7 @@ const AddUser = () => {
                         </div>
                     </CardContent>
                     <CardActions>
-                        <Button variant="contained" onClick={() => { apiService.createUser(user); }}>User Save</Button>
+                        <Button variant="contained" onClick={saveUser}>User Save</Button>
                     </CardActions>
                 </LocalizationProvider>
             </Card>

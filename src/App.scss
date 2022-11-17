@@ -5,31 +5,59 @@
 
 section.grid {
   display: table;
-  width: 100%;
 }
 
 section.grid>* {
-  display: table-row;
+  display: flex;
+  flex-direction: row;
 }
 
 section.grid .col {
-  display: table-cell;
+  display: flex;
+  min-width: 50px;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
 }
 
 section.calendar-view {
+  background: #edf1f9;
+
+  header .col {
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    border-left: 1px solid;
+    font-weight: 500;
+  }
+
+  header .col:last-child {
+    border-right: 1px solid;
+  }
+
+  .row .col {
+    border-left: 1px solid;
+    border-bottom: 1px solid;
+  }
+
+  .row .col:last-child {
+    border-right: 1px solid;
+  }
+
   .col {
     text-align: center;
-    background: #5f5d5d;
-    color: white;
+    color: #000;
+    border-color: #e5e5e5 !important;
     cursor: pointer;
   }
 
   .col.yes {
     background-color: #30741a;
+    color: #fff;
   }
 
   .col.no {
-    background-color: #e83153;
+    background-color: #d71616;
+    color: #fff;
   }
 
   .col.disable {
@@ -70,7 +98,7 @@ section.calendar-view {
   flex-direction: column;
 
   .form-field {
-    margin: 10px 0;
+    margin: 10px 0 !important;
   }
 }
 
@@ -79,7 +107,7 @@ section.calendar-view {
   flex-direction: column;
 
   .form-field {
-    margin: 10px 0;
+    margin: 10px 0 !important;
   }
 }
 
@@ -88,15 +116,16 @@ section.calendar-view {
   flex-direction: column;
 
   .form-field {
-    margin: 10px 0;
+    margin: 10px 0 !important;
   }
 }
 
 .payment-details-form {
   display: flex;
   flex-direction: column;
+  margin-bottom: 15px;
 
   .form-field {
-    margin: 10px 0;
+    margin: 10px 0 !important;
   }
 }

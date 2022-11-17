@@ -5,6 +5,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import { InputLabel } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 
 const yearList = [2022, 2023]
 const monthList = [
@@ -22,6 +23,12 @@ const monthList = [
     { label: `December`, value: 11 },
 ]
 const monthsShort = [`jan`, `feb`, `mar`, `apr`, `may`, `jun`, `jul`, `aug`, `sep`, `oct`, `nov`, `dec`]
+const columns = [
+    { field: 'date', headerName: 'Date' },
+    { field: 'type', headerName: 'Type' },
+    { field: 'sum', headerName: 'Sum' },
+    { field: 'mode', headerName: 'Mode' }
+]
 
 const PaymentDetails = (props) => {
     const [paymentDetails, setPaymentDetails] = useState([]);
@@ -98,26 +105,15 @@ const PaymentDetails = (props) => {
                 </FormControl>
                 <Button variant="contained" onClick={changePaymentDetails}>Get Payment Details</Button>
             </form>
-            <section className='grid payment-grid'>
-                <header>
-                    <div className='col'>Date</div>
-                    <div className='col'>Type</div>
-                    <div className='col'>Sum</div>
-                    <div className='col'>Mode</div>
-                </header>
-                {
-                    paymentDetails.length ?
-                        paymentDetails.map((row, key) => {
-                            return <div className='payment-item' key={"payment" + key}>
-                                <div className='col'>{row.date.toDateString()}</div>
-                                <div className='col'>{row.type}</div>
-                                <div className='col'>{row.sum}</div>
-                                <div className='col'>{row.mode}</div>
-                            </div>
-                        })
-                        : <div>No Records To Show</div>
-                }
-            </section>
+            <div style={{ height: 200, width: '100%' }}>
+                <DataGrid
+                    rows={paymentDetails}
+                    columns={columns}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
+                    disableSelectionOnClick
+                />
+            </div>
         </>
     )
 }

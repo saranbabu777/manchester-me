@@ -52,6 +52,7 @@ const Attendance = (props) => {
     }
 
     const present = attendance.filter(x => x.status === 'IN').map(x => x.date.getDate());
+    const absent = attendance.filter(x => x.status === 'OUT').map(x => x.date.getDate());
 
     return (
         <>
@@ -72,7 +73,10 @@ const Attendance = (props) => {
                                 {
                                     week.map((day, dayKey) => {
                                         return (
-                                            <div className={`col ` + (day ? (present.includes(day.getDate()) ? `yes ` : `no `) : ` disable`)} key={"day" + dayKey + "week" + key}>
+                                            <div className={
+                                                `col ` + (day ? ((present.includes(day.getDate()) ? `yes ` : ``) +
+                                                    (absent.includes(day.getDate()) ? `no ` : ``)) : ` disable`)}
+                                                key={"day" + dayKey + "week" + key}>
                                                 {day ? day.getDate() : null}
                                             </div>
                                         )
