@@ -111,7 +111,7 @@ section.calendar-view {
   }
 }
 
-.dashboard-form {
+.attendance-form {
   display: flex;
   flex-direction: column;
 
@@ -137,4 +137,12 @@ section.calendar-view {
   .form-field {
     margin: 10px 0 !important;
   }
+}
+
+.staff-dashboard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

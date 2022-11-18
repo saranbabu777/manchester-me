@@ -1,92 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import * as apiService from '../services/api.service';
+import Button from '@mui/material/Button';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { InputLabel, FormControl, Card, CardContent, Typography, CardActions, TextField } from "@mui/material";
+import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useParams } from 'react-router-dom';
 
-const Attendance = (props) => {
-    const [attendance, setAttendance] = useState([]);
-    const [daysOfMonth, setDaysOfMonth] = useState([]);
+const Attendance = () => {
+    const [attendanceForm, setAttendanceForm] = useState({
+        email: "",
+        date: new Date(),
+        status: ""
+    });
+    const params = useParams();
 
     useEffect(() => {
-        const now = new Date();
-        const days = getAllDaysInMonth(now.getFullYear(), now.getMonth())
-        setDaysOfMonth((prev) => {
-            return days;
-        })
+        const userName = localStorage.getItem('userName');
+        const status = params.status.toString();
+        setAttendanceForm((prev) => {
+            return { ...prev, email: userName ? userName : "", status };
+        });
     }, [])
 
-    useEffect(() => {
-        const getAttendanceDetails = async () => {
-            const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            const monthStartDate = new Date(y, m, 1);
-            const monthEndDate = new Date(y, m + 1, 0);
-            const data = await apiService.filterAttendance(props.email, monthStartDate, monthEndDate);
-            setAttendance((prev) => {
-                return data;
-            });
-        }
-        getAttendanceDetails();
-    }, [props.email])
-
-    const getAllDaysInMonth = (year, month) => {
-        const date = new Date(year, month, 1);
-        const dates = [];
-        while (date.getMonth() === month) {
-            dates.push(new Date(date));
-            date.setDate(date.getDate() + 1);
-        }
-        return dates;
+    const handleChange = (change) => {
+        setAttendanceForm(prev => {
+            return { ...prev, ...change };
+        })
     }
 
-    const daysByWeek = () => {
-        let i = 0;
-        const weeks = [];
-        if (daysOfMonth.length > 0) {
-            const firstDay = daysOfMonth[0].getDay();
-            weeks.push([...Array(firstDay).fill(), ...daysOfMonth.slice(i, ((i + 7) - firstDay))]);
-            i = 7 - firstDay;
-            while (i < daysOfMonth.length) {
-                weeks.push(daysOfMonth.slice(i, i + 7))
-                i += 7;
-            }
-        }
-        return weeks;
+    const createAttendance = () => {
+        apiService.createAttendance(attendanceForm)
     }
-
-    const present = attendance.filter(x => x.status === 'IN').map(x => x.date.getDate());
-    const absent = attendance.filter(x => x.status === 'OUT').map(x => x.date.getDate());
 
     return (
         <>
-            <section className='grid calendar-view'>
-                <header>
-                    <div className="col">Su</div>
-                    <div className="col">Mo</div>
-                    <div className="col">Tu</div>
-                    <div className="col">We</div>
-                    <div className="col">Th</div>
-                    <div className="col">Fr</div>
-                    <div className="col">Sa</div>
-                </header>
-                {
-                    daysByWeek().map((week, key) => {
-                        return (
-                            <div className='row' key={"week" + key}>
-                                {
-                                    week.map((day, dayKey) => {
-                                        return (
-                                            <div className={
-                                                `col ` + (day ? ((present.includes(day.getDate()) ? `yes ` : ``) +
-                                                    (absent.includes(day.getDate()) ? `no ` : ``)) : ` disable`)}
-                                                key={"day" + dayKey + "week" + key}>
-                                                {day ? day.getDate() : null}
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        )
-                    })
-                }
-            </section>
+            <Card sx={{ minWidth: 275 }}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                            Hello, {attendanceForm.email}
+                        </Typography>
+                        <div className='attendance-form'>
+                            <FormControl className='form-field'>
+                                <DesktopDatePicker
+                                    label="Select Date"
+                                    inputFormat="dd/MM/yyyy"
+                                    value={attendanceForm.date}
+                                    onChange={(value) => handleChange({ date: value })}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </FormControl>
+                            <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                                <InputLabel id="status-label">Status</InputLabel>
+                                <Select
+                                    id="status"
+                                    label="Status"
+                                    labelId="status-label"
+                                    value={attendanceForm.status}
+                                    onChange={(e) => { handleChange({ status: e.target.value }); }}
+                                >
+                                    <MenuItem value='IN'>Mark as present</MenuItem>
+                                    <MenuItem value='OUT'>Apply Leave</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                    </CardContent>
+                    <CardActions>
+                        <Button variant="contained" onClick={createAttendance}>Proceed</Button>
+                    </CardActions>
+                </LocalizationProvider>
+            </Card>
         </>
     )
 }

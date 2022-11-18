@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, Tab, Tabs, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Attendance from './attendance';
+import Calendar from './calendar';
 import PaymentDetails from './paymentDetails';
 import TabPanel, { a11yProps } from './tabPanel';
 
@@ -33,7 +33,7 @@ const UserDetails = () => {
                         </Tabs>
                     </Box>
                     <TabPanel value={selectedTab} index={0}>
-                        <Attendance email={email} />
+                        <Calendar email={email} />
                     </TabPanel>
                     <TabPanel value={selectedTab} index={1}>
                         <PaymentDetails email={email} />

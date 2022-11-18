@@ -65,6 +65,32 @@ const LeftMenu = (props) => {
                         </Link>
                     </ListItem>
                 </List>
+                <Divider />
+                <List>
+                    <ListItem key='Manage Leave' disablePadding>
+                        <Link to="/manage-leave">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Dashboard />
+                                </ListItemIcon>
+                                <ListItemText primary='Manage Leave' />
+                            </ListItemButton>
+                        </Link>
+                    </ListItem>
+                </List>
+                <Divider />
+                <List>
+                    <ListItem key='Salary' disablePadding>
+                        <Link to="/salary">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Dashboard />
+                                </ListItemIcon>
+                                <ListItemText primary='Salary' />
+                            </ListItemButton>
+                        </Link>
+                    </ListItem>
+                </List>
             </Box>
         </>
     )
