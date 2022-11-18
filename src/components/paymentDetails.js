@@ -27,7 +27,9 @@ const columns = [
     { field: 'date', headerName: 'Date' },
     { field: 'type', headerName: 'Type' },
     { field: 'sum', headerName: 'Sum' },
-    { field: 'mode', headerName: 'Mode' }
+    { field: 'mode', headerName: 'Mode' },
+    { field: 'lastUpdatedBy', headerName: 'Last Updated User' },
+    { field: 'lastUpdatedOn', headerName: 'Last Updated Date' }
 ]
 
 const PaymentDetails = (props) => {

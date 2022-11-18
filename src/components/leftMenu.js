@@ -3,11 +3,11 @@ import { Box, Divider, List, ListItem, ListItemButton } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from "react-router-dom";
-import { Dashboard, Login, PlaylistAdd, PlusOne } from '@mui/icons-material';
+import { Dashboard, Login, Money, Person, PlaylistAdd, PlusOne } from '@mui/icons-material';
 
 const LeftMenu = (props) => {
     return (
-        <>
+        <div className='left-nav'>
             <Box
                 sx={{ width: 250 }}
                 role="presentation"
@@ -15,13 +15,13 @@ const LeftMenu = (props) => {
                 onKeyDown={props.toggleDrawer(false)}
             >
                 <List>
-                    <ListItem key='Login' disablePadding>
+                    <ListItem key='Mock Login' disablePadding>
                         <Link to="/login">
                             <ListItemButton>
                                 <ListItemIcon>
                                     <Login />
                                 </ListItemIcon>
-                                <ListItemText primary='Login' />
+                                <ListItemText primary='Mock Login' />
                             </ListItemButton>
                         </Link>
                     </ListItem>
@@ -71,7 +71,7 @@ const LeftMenu = (props) => {
                         <Link to="/manage-leave">
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <Dashboard />
+                                    <Person />
                                 </ListItemIcon>
                                 <ListItemText primary='Manage Leave' />
                             </ListItemButton>
@@ -84,15 +84,16 @@ const LeftMenu = (props) => {
                         <Link to="/salary">
                             <ListItemButton>
                                 <ListItemIcon>
-                                    <Dashboard />
+                                    <Money />
                                 </ListItemIcon>
                                 <ListItemText primary='Salary' />
                             </ListItemButton>
                         </Link>
                     </ListItem>
                 </List>
+                <Divider />
             </Box>
-        </>
+        </div>
     )
 }
 

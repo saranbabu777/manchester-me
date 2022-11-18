@@ -33,8 +33,17 @@ const Attendance = () => {
     }
 
     const createAttendance = async () => {
-        await apiService.createAttendance(attendanceForm);
-        addNotification('Attendance saved successfully', 'success')
+        const startDate = new Date(attendanceForm.date);
+        startDate.setHours(0, 0, 0, 0);
+        const endDate = new Date(attendanceForm.date);
+        endDate.setDate(endDate.getDate() + 1);
+        const existingRecords = await apiService.filterAttendance(attendanceForm.email, startDate, endDate);
+        if (existingRecords.length === 0) {
+            await apiService.createAttendance(attendanceForm);
+            addNotification('Attendance saved successfully', 'success')
+        } else {
+            addNotification('Attendance record already exist', 'error')
+        }
     }
 
     return (

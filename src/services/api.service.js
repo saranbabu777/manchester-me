@@ -7,7 +7,9 @@ const attendanceCollectionRef = collection(db, "attendance");
 
 /*Attendance Collection*/
 export const createAttendance = async (attendance) => {
-    await addDoc(attendanceCollectionRef, attendance)
+    const lastUpdatedBy = localStorage.getItem('userName').toString();
+    const lastUpdatedOn = new Date();
+    await addDoc(attendanceCollectionRef, { ...attendance, lastUpdatedBy, lastUpdatedOn })
 }
 
 export const filterAttendance = async (email, start, end) => {
@@ -19,19 +21,25 @@ export const filterAttendance = async (email, start, end) => {
 
 /*Payment Collection*/
 export const createPayment = async (payment) => {
-    await addDoc(paymentCollectionRef, payment)
+    const lastUpdatedBy = localStorage.getItem('userName').toString();
+    const lastUpdatedOn = new Date();
+    await addDoc(paymentCollectionRef, { ...payment, lastUpdatedBy, lastUpdatedOn })
 }
 
 export const filterPayment = async (email, month, year) => {
     const q = query(paymentCollectionRef, where("email", "==", email), where("forMonth", "==", month), where("forYear", "==", year))
     const data = await getDocs(q);
-    const parsedPayment = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => ({ ...doc, date: doc.date.toDate() }));
+    const parsedPayment = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => (
+        { ...doc, date: doc.date.toDate(), lastUpdatedOn: doc.lastUpdatedOn ? doc.lastUpdatedOn.toDate() : '' }
+    ));
     return parsedPayment;
 }
 
 /*Users Collection*/
 export const createUser = async (user) => {
-    await addDoc(usersCollectionRef, user)
+    const lastUpdatedBy = localStorage.getItem('userName').toString();
+    const lastUpdatedOn = new Date();
+    await addDoc(usersCollectionRef, { ...user, lastUpdatedBy, lastUpdatedOn })
 }
 
 export const updateUser = async (id, name) => {

@@ -1,5 +1,5 @@
 import { Close } from '@mui/icons-material';
-import { IconButton, Snackbar } from '@mui/material';
+import { Alert, IconButton, Snackbar } from '@mui/material';
 import useNotification from '../common/hooks/useNotification';
 
 const Notification = () => {
@@ -29,11 +29,15 @@ const Notification = () => {
         <>
             <Snackbar
                 open={notification ? true : false}
-                autoHideDuration={6000}
+                autoHideDuration={4000}
                 onClose={handleClose}
                 message={notification?.message}
                 action={action}
-            />
+            >
+                {notification &&
+                    <Alert onClose={handleClose} severity={notification.status}>{notification.message}</Alert>
+                }
+            </Snackbar>
         </>
     )
 }

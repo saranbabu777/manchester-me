@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AccountCircle } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,6 +11,12 @@ import LeftMenu from './leftMenu';
 const Header = () => {
     const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const email = localStorage.getItem('userName').toString();
+        setUser(email);
+    }, [])
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -85,8 +91,8 @@ const Header = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
+                            <MenuItem onClick={handleClose}>{user}</MenuItem>
+                            <MenuItem onClick={handleClose}>Settings</MenuItem>
                         </Menu>
                     </div>
                 )}
