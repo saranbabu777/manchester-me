@@ -6,12 +6,13 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import LeftMenu from './leftMenu';
+import useAuthentication from '../common/hooks/useAuthentication';
 
 
 const Header = () => {
-    const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [user, setUser] = useState(null);
+    const { auth } = useAuthentication();
 
     useEffect(() => {
         const email = localStorage.getItem('userName').toString();
@@ -91,7 +92,7 @@ const Header = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={handleClose}>{user}</MenuItem>
+                            <MenuItem onClick={handleClose}>{auth.email}</MenuItem>
                             <MenuItem onClick={handleClose}>Settings</MenuItem>
                         </Menu>
                     </div>

@@ -58,6 +58,12 @@ export const searchUsers = async (name) => {
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
+export const getUserByEmail = async (email) => {
+    const q = query(usersCollectionRef, where("email", "==", email))
+    const data = await getDocs(q);
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+}
+
 export const getUsers = async () => {
     const data = await getDocs(usersCollectionRef);
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));

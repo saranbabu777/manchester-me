@@ -15,28 +15,31 @@ import ManageLeave from './components/manageLeave';
 import Salary from './components/salary';
 import NotificationProvider from './common/providers/notificationProvider';
 import Notification from './components/notification';
+import AuthProvider from './common/providers/authProvider';
 
 function App() {
   return (
     <div className="App">
       <ThemeProvider theme={darkTheme}>
-        <NotificationProvider>
-          <Header />
-          <div className='main-content'>
-            <Routes>
-              <Route exact path="/" element={<UserList />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/add-user" element={<AddUser />} />
-              <Route path="/user-details/:email" element={<UserDetails />} />
-              <Route path="/add-payment" element={<AddPayment />} />
-              <Route path="/dashboard" element={<StaffDashboard />} />
-              <Route path="/manage-leave" element={<ManageLeave />} />
-              <Route path="/salary" element={<Salary />} />
-              <Route path="/attendance/:status" element={<Attendance />} />
-            </Routes>
-          </div>
-          <Notification />
-        </NotificationProvider>
+        <AuthProvider>
+          <NotificationProvider>
+            <Header />
+            <div className='main-content'>
+              <Routes>
+                <Route exact path="/" element={<UserList />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/add-user" element={<AddUser />} />
+                <Route path="/user-details/:email" element={<UserDetails />} />
+                <Route path="/add-payment" element={<AddPayment />} />
+                <Route path="/dashboard" element={<StaffDashboard />} />
+                <Route path="/manage-leave" element={<ManageLeave />} />
+                <Route path="/salary" element={<Salary />} />
+                <Route path="/attendance/:status" element={<Attendance />} />
+              </Routes>
+            </div>
+            <Notification />
+          </NotificationProvider>
+        </AuthProvider>
       </ThemeProvider>
     </div>
   );

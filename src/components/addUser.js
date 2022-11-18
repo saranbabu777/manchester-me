@@ -32,9 +32,14 @@ const AddUser = () => {
     }
 
     const saveUser = async () => {
-        const newUser = { ...user, name: user.name.toLowerCase() };
-        await apiService.createUser(newUser);
-        addNotification('User saved successfully', 'success')
+        const users = await apiService.getUserByEmail(user.email);
+        if (users.length === 0) {
+            const newUser = { ...user, name: user.name.toLowerCase() };
+            await apiService.createUser(newUser);
+            addNotification('User saved successfully', 'success');
+        } else {
+            addNotification('Email already exist!', 'error');
+        }
     }
 
     return (

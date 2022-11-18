@@ -3,13 +3,17 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { FormControl, Card, CardContent, Typography, CardActions } from "@mui/material";
 import { useNavigate } from 'react-router-dom/dist';
-
+import useAuthentication from '../common/hooks/useAuthentication';
+import * as apiService from '../services/api.service';
+import useNotification from '../common/hooks/useNotification';
 
 const Login = () => {
     const [loginForm, setLoginForm] = useState({
         email: ""
     });
     const navigate = useNavigate();
+    const { addAuth } = useAuthentication();
+    const { addNotification } = useNotification();
 
     const handleChange = (change) => {
         setLoginForm(prev => {
@@ -17,9 +21,16 @@ const Login = () => {
         })
     }
 
-    const login = () => {
-        localStorage.setItem('userName', loginForm.email);
-        navigate(`/`);
+    const login = async () => {
+        const users = await apiService.getUserByEmail(loginForm.email);
+        if (users.length > 0) {
+            const { email, role } = users[0];
+            localStorage.setItem('userName', loginForm.email);
+            addAuth(email, role);
+            navigate(`/`);
+        } else {
+            addNotification('User does not exist!', 'error');
+        }
     }
 
     return (
