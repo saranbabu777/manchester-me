@@ -12,6 +12,7 @@ import { FormControl, InputLabel } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import useNotification from '../common/hooks/useNotification';
 
 const yearList = [2022, 2023]
 const monthList = [
@@ -39,6 +40,7 @@ const AddPayment = () => {
         forMonth: "",
         forYear: 0
     });
+    const { addNotification } = useNotification();
 
     const handleChange = (change) => {
         setPaymentForm(prev => {
@@ -46,8 +48,9 @@ const AddPayment = () => {
         })
     }
 
-    const createPayment = () => {
-        apiService.createPayment(paymentForm);
+    const createPayment = async () => {
+        await apiService.createPayment(paymentForm);
+        addNotification('Payment added successfully', 'success')
     }
 
     return (

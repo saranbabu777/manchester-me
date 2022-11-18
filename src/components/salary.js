@@ -1,6 +1,5 @@
 import { Button, Card, CardActions, CardContent, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom/dist';
 import PaymentDetails from './paymentDetails';
 
@@ -15,6 +14,7 @@ const Salary = () => {
     const navigateToPayment = () => {
         navigate(`/add-payment`);
     }
+
     return (
         <>
             <Card sx={{ minWidth: 275 }}>

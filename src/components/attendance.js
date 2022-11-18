@@ -7,6 +7,7 @@ import { InputLabel, FormControl, Card, CardContent, Typography, CardActions, Te
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useParams } from 'react-router-dom';
+import useNotification from '../common/hooks/useNotification';
 
 const Attendance = () => {
     const [attendanceForm, setAttendanceForm] = useState({
@@ -15,6 +16,7 @@ const Attendance = () => {
         status: ""
     });
     const params = useParams();
+    const { addNotification } = useNotification();
 
     useEffect(() => {
         const userName = localStorage.getItem('userName');
@@ -30,8 +32,9 @@ const Attendance = () => {
         })
     }
 
-    const createAttendance = () => {
-        apiService.createAttendance(attendanceForm)
+    const createAttendance = async () => {
+        await apiService.createAttendance(attendanceForm);
+        addNotification('Attendance saved successfully', 'success')
     }
 
     return (

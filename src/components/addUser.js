@@ -12,6 +12,7 @@ import { FormControl, InputLabel } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import useNotification from '../common/hooks/useNotification';
 
 
 const AddUser = () => {
@@ -22,6 +23,7 @@ const AddUser = () => {
         phone: "",
         grossSalary: 0,
     })
+    const { addNotification } = useNotification();
 
     const handleUserForm = (change) => {
         setUser(prevValue => {
@@ -29,9 +31,10 @@ const AddUser = () => {
         })
     }
 
-    const saveUser = () => {
+    const saveUser = async () => {
         const newUser = { ...user, name: user.name.toLowerCase() };
-        apiService.createUser(newUser);
+        await apiService.createUser(newUser);
+        addNotification('User saved successfully', 'success')
     }
 
     return (

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as apiService from '../services/api.service';
 import Button from '@mui/material/Button';
 import { Card, CardContent, Typography, CardActions } from "@mui/material";
+import useNotification from '../common/hooks/useNotification';
 
 const StaffDashboard = () => {
     const [attendanceForm, setAttendanceForm] = useState({
@@ -9,6 +10,7 @@ const StaffDashboard = () => {
         date: new Date(),
         status: "IN"
     });
+    const { addNotification } = useNotification();
 
     useEffect(() => {
         const userName = localStorage.getItem('userName');
@@ -17,8 +19,9 @@ const StaffDashboard = () => {
         });
     }, [])
 
-    const createAttendance = () => {
-        apiService.createAttendance(attendanceForm)
+    const createAttendance = async () => {
+        await apiService.createAttendance(attendanceForm);
+        addNotification('Attendance saved successfully', 'success')
     }
 
     return (
