@@ -7,17 +7,40 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import LeftMenu from './leftMenu';
 import useAuthentication from '../common/hooks/useAuthentication';
+import { getUserByEmail, logOut } from '../services/api.service';
+import useNotification from '../common/hooks/useNotification';
+import { onAuthStateChanged } from '@firebase/auth';
+import { auth as firebaseAuth } from '../firebase.config';
 
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const [user, setUser] = useState(null);
-    const { auth } = useAuthentication();
+    const { auth, addAuth } = useAuthentication();
+    const { addNotification } = useNotification();
 
     useEffect(() => {
-        const email = localStorage.getItem('userName').toString();
-        setUser(email);
+        onAuthStateChanged(firebaseAuth, (currentUser) => {
+            if (currentUser) {
+                validateLogin(currentUser);
+            } else {
+                localStorage.setItem('man-client-user-inf', null);
+            }
+        });
     }, [])
+
+
+    const validateLogin = async (currentUser) => {
+        const { displayName, email, profilePic } = currentUser;
+        const users = await getUserByEmail(email);
+        if (users.length > 0) {
+            const { role } = users[0];
+            localStorage.setItem('userName', email);
+            localStorage.setItem('man-client-user-inf', { displayName, email, profilePic });
+            addAuth(email, role);
+        } else {
+            addNotification('User does not exist!', 'error');
+        }
+    }
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -93,7 +116,7 @@ const Header = () => {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>{auth.email}</MenuItem>
-                            <MenuItem onClick={handleClose}>Settings</MenuItem>
+                            <MenuItem onClick={() => { logOut(); handleClose(); }}>Sign Out</MenuItem>
                         </Menu>
                     </div>
                 )}

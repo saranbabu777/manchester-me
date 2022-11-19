@@ -4,7 +4,6 @@ import UserList from './components/userList';
 import AddUser from './components/addUser';
 import AddPayment from './components/addPayment';
 import Attendance from './components/attendance';
-import PaymentDetails from './components/paymentDetails';
 import UserDetails from './components/userDetails';
 import Header from './components/header';
 import { ThemeProvider } from '@mui/material';

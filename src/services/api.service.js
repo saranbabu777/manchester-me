@@ -1,5 +1,6 @@
 import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where } from '@firebase/firestore';
-import { db } from '../firebase.config';
+import { GoogleAuthProvider, signInWithPopup, signOut } from "@firebase/auth";
+import { db, auth } from '../firebase.config';
 
 const usersCollectionRef = collection(db, "users");
 const paymentCollectionRef = collection(db, "payment");
@@ -67,4 +68,18 @@ export const getUserByEmail = async (email) => {
 export const getUsers = async () => {
     const data = await getDocs(usersCollectionRef);
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+}
+
+const provider = new GoogleAuthProvider();
+
+export const signInWithGoogle = async () => {
+    try {
+        await signInWithPopup(auth, provider);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const logOut = async () => {
+    await signOut(auth)
 }

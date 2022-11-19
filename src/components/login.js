@@ -48,6 +48,7 @@ const Login = () => {
                 </CardContent>
                 <CardActions>
                     <Button variant="contained" onClick={login}>Login</Button>
+                    <Button variant="contained" className="google-btn" onClick={apiService.signInWithGoogle}>Login With Google</Button>
                 </CardActions>
             </Card>
         </>
