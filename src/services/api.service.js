@@ -8,7 +8,9 @@ const attendanceCollectionRef = collection(db, "attendance");
 
 /*Attendance Collection*/
 export const createAttendance = async (attendance) => {
-    const lastUpdatedBy = localStorage.getItem('userName').toString();
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
     const lastUpdatedOn = new Date();
     await addDoc(attendanceCollectionRef, { ...attendance, lastUpdatedBy, lastUpdatedOn })
 }
@@ -22,7 +24,9 @@ export const filterAttendance = async (email, start, end) => {
 
 /*Payment Collection*/
 export const createPayment = async (payment) => {
-    const lastUpdatedBy = localStorage.getItem('userName').toString();
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
     const lastUpdatedOn = new Date();
     await addDoc(paymentCollectionRef, { ...payment, lastUpdatedBy, lastUpdatedOn })
 }
@@ -38,7 +42,9 @@ export const filterPayment = async (email, month, year) => {
 
 /*Users Collection*/
 export const createUser = async (user) => {
-    const lastUpdatedBy = localStorage.getItem('userName').toString();
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
     const lastUpdatedOn = new Date();
     await addDoc(usersCollectionRef, { ...user, lastUpdatedBy, lastUpdatedOn })
 }

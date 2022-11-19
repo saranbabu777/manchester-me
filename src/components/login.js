@@ -25,7 +25,7 @@ const Login = () => {
         const users = await getUserByEmail(loginForm.email);
         if (users.length > 0) {
             const { email, role } = users[0];
-            localStorage.setItem('userName', loginForm.email);
+            localStorage.setItem('man-client-user-inf', JSON.stringify({ email }));
             addAuth(email, role);
             navigate(`/`);
         } else {

@@ -13,9 +13,10 @@ const StaffDashboard = () => {
     const { addNotification } = useNotification();
 
     useEffect(() => {
-        const userName = localStorage.getItem('userName');
+        const currentUserObject = localStorage.getItem('man-client-user-inf');
+        const loggedInEmail = currentUserObject ? JSON.parse(currentUserObject).email : '';
         setAttendanceForm((prev) => {
-            return { ...prev, email: userName ? userName : "" };
+            return { ...prev, email: loggedInEmail };
         });
     }, [])
 

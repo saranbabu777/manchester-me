@@ -8,7 +8,9 @@ const ManageLeave = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setEmail(localStorage.getItem('userName'));
+        const currentUserObject = localStorage.getItem('man-client-user-inf');
+        const loggedInEmail = currentUserObject ? JSON.parse(currentUserObject).email : '';
+        setEmail(loggedInEmail);
     }, []);
 
     const navigateToAttendance = (status) => {

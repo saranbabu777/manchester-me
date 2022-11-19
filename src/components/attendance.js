@@ -19,10 +19,11 @@ const Attendance = () => {
     const { addNotification } = useNotification();
 
     useEffect(() => {
-        const userName = localStorage.getItem('userName');
+        const currentUserObject = localStorage.getItem('man-client-user-inf');
+        const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
         const status = params.status.toString();
         setAttendanceForm((prev) => {
-            return { ...prev, email: userName ? userName : "", status };
+            return { ...prev, email: email || "", status };
         });
     }, [])
 

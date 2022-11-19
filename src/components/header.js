@@ -34,8 +34,7 @@ const Header = () => {
         const users = await getUserByEmail(email);
         if (users.length > 0) {
             const { role } = users[0];
-            localStorage.setItem('userName', email);
-            localStorage.setItem('man-client-user-inf', { displayName, email, profilePic });
+            localStorage.setItem('man-client-user-inf', JSON.stringify({ displayName, email, profilePic }));
             addAuth(email, role);
         } else {
             addNotification('User does not exist!', 'error');
