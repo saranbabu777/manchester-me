@@ -80,7 +80,7 @@ const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = async () => {
     try {
-        await signInWithPopup(auth, provider);
+        return await signInWithPopup(auth, provider);
     } catch (error) {
         console.log(error);
     }

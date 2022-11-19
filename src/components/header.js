@@ -9,19 +9,22 @@ import LeftMenu from './leftMenu';
 import useAuthentication from '../common/hooks/useAuthentication';
 import { logOut } from '../services/api.service';
 import useNotification from '../common/hooks/useNotification';
+import { useNavigate } from 'react-router-dom';
 
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const { auth, removeAuth } = useAuthentication();
     const { addNotification } = useNotification();
+    const navigate = useNavigate();
 
-    const signOut = () => {
+    const signOut = async () => {
         removeAuth();
-        logOut();
+        await logOut();
         handleClose();
         localStorage.setItem('man-client-user-inf', null);
         addNotification('User signed out', 'success');
+        navigate('/login');
     }
 
     const handleMenu = (event) => {

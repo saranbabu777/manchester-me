@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { FormControl, Card, CardContent, Typography, CardActions } from "@mui/material";
@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom/dist';
 import useAuthentication from '../common/hooks/useAuthentication';
 import { getUserByEmail, signInWithGoogle } from '../services/api.service';
 import useNotification from '../common/hooks/useNotification';
-import { onAuthStateChanged } from '@firebase/auth';
-import { auth as firebaseAuth } from '../firebase.config';
 
 const Login = () => {
     const [loginForm, setLoginForm] = useState({
@@ -16,28 +14,6 @@ const Login = () => {
     const navigate = useNavigate();
     const { addAuth } = useAuthentication();
     const { addNotification } = useNotification();
-
-    useEffect(() => {
-        onAuthStateChanged(firebaseAuth, (currentUser) => {
-            if (currentUser) {
-                validateLogin(currentUser);
-            } else {
-                localStorage.setItem('man-client-user-inf', null);
-            }
-        });
-    }, [])
-
-    const validateLogin = async (currentUser) => {
-        const { displayName, email, profilePic } = currentUser;
-        const users = await getUserByEmail(email);
-        if (users.length > 0) {
-            const { role } = users[0];
-            localStorage.setItem('man-client-user-inf', JSON.stringify({ displayName, email, profilePic }));
-            addAuth(email, role);
-        } else {
-            addNotification('User does not exist!', 'error');
-        }
-    }
 
     const handleChange = (change) => {
         setLoginForm(prev => {
@@ -58,8 +34,21 @@ const Login = () => {
     }
 
     const loginWithGoogle = async () => {
-        await signInWithGoogle();
-        navigate(`/`);
+        const result = await signInWithGoogle();
+        validateLogin(result.user);
+    }
+
+    const validateLogin = async (currentUser) => {
+        const { displayName, email, profilePic } = currentUser;
+        const users = await getUserByEmail(email);
+        if (users.length > 0) {
+            const { role } = users[0];
+            localStorage.setItem('man-client-user-inf', JSON.stringify({ displayName, email, profilePic }));
+            addAuth(email, role);
+            navigate(`/`);
+        } else {
+            addNotification('User does not exist!', 'error');
+        }
     }
 
     return (
