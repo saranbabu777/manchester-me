@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as apiService from '../services/api.service';
+import { filterAttendance } from '../services/api.service';
 
 const Calendar = (props) => {
     const [attendance, setAttendance] = useState([]);
@@ -18,7 +18,7 @@ const Calendar = (props) => {
             const date = new Date(), y = date.getFullYear(), m = date.getMonth();
             const monthStartDate = new Date(y, m, 1);
             const monthEndDate = new Date(y, m + 1, 0);
-            const data = await apiService.filterAttendance(props.email, monthStartDate, monthEndDate);
+            const data = await filterAttendance(props.email, monthStartDate, monthEndDate);
             setAttendance((prev) => {
                 return data;
             });

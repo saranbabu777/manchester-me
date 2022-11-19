@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as apiService from '../services/api.service';
+import { createPayment } from '../services/api.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -48,8 +48,8 @@ const AddPayment = () => {
         })
     }
 
-    const createPayment = async () => {
-        await apiService.createPayment(paymentForm);
+    const savePayment = async () => {
+        await createPayment(paymentForm);
         addNotification('Payment added successfully', 'success')
     }
 
@@ -133,7 +133,7 @@ const AddPayment = () => {
                         </div>
                     </CardContent>
                     <CardActions>
-                        <Button variant="contained" onClick={createPayment}>Add Payment</Button>
+                        <Button variant="contained" onClick={savePayment}>Add Payment</Button>
                     </CardActions>
                 </LocalizationProvider>
             </Card>

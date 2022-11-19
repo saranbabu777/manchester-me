@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as apiService from '../services/api.service';
+import { getUserByEmail, createUser } from '../services/api.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -32,10 +32,10 @@ const AddUser = () => {
     }
 
     const saveUser = async () => {
-        const users = await apiService.getUserByEmail(user.email);
+        const users = await getUserByEmail(user.email);
         if (users.length === 0) {
             const newUser = { ...user, name: user.name.toLowerCase() };
-            await apiService.createUser(newUser);
+            await createUser(newUser);
             addNotification('User saved successfully', 'success');
         } else {
             addNotification('Email already exist!', 'error');

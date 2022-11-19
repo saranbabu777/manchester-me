@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as apiService from '../services/api.service';
+import { getUsers, deleteUser } from '../services/api.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { FormControl } from "@mui/material";
@@ -12,19 +12,18 @@ const UserList = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-
-        const getUsers = async () => {
-            const data = await apiService.getUsers();
-            setAllUsers((prev) => {
-                return data;
-            });
-            setUsers((prev) => {
-                return data;
-            });
-        }
-        getUsers();
-
+        loadUserList();
     }, [])
+
+    const loadUserList = async () => {
+        const data = await getUsers();
+        setAllUsers((prev) => {
+            return data;
+        });
+        setUsers((prev) => {
+            return data;
+        });
+    }
 
     const searchUsers = async (search) => {
         const filteredUsers = allUsers.filter(x => x.name.toLowerCase().includes(search.toLowerCase()))
@@ -50,7 +49,7 @@ const UserList = () => {
                 users.map((user, key) => {
                     return <div className='user-block' key={"user" + key} onClick={() => { viewUser(user.email); }}>
                         <p>{user.name}</p>
-                        <DeleteIcon onClick={(e) => { e.stopPropagation(); apiService.deleteUser(user.id); }} />
+                        <DeleteIcon onClick={(e) => { e.stopPropagation(); deleteUser(user.id); }} />
                     </div>
                 })
             }

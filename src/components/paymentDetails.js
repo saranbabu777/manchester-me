@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as apiService from '../services/api.service';
+import { filterPayment } from '../services/api.service';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -42,7 +42,7 @@ const PaymentDetails = (props) => {
     useEffect(() => {
         const getPaymentDetails = async () => {
             const now = new Date();
-            const data = await apiService.filterPayment(props.email, monthsShort[now.getMonth()], now.getFullYear());
+            const data = await filterPayment(props.email, monthsShort[now.getMonth()], now.getFullYear());
             setPaymentDetails((prev) => {
                 return data;
             });
@@ -60,7 +60,7 @@ const PaymentDetails = (props) => {
     }
 
     const changePaymentDetails = async () => {
-        const data = await apiService.filterPayment(props.email, monthsShort[formValue.selectedMonth], formValue.selectedYear);
+        const data = await filterPayment(props.email, monthsShort[formValue.selectedMonth], formValue.selectedYear);
         setPaymentDetails((prev) => {
             return data;
         });

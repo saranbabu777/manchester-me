@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { FormControl, Card, CardContent, Typography, CardActions } from "@mui/material";
 import { useNavigate } from 'react-router-dom/dist';
 import useAuthentication from '../common/hooks/useAuthentication';
-import * as apiService from '../services/api.service';
+import { getUserByEmail, signInWithGoogle } from '../services/api.service';
 import useNotification from '../common/hooks/useNotification';
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
     }
 
     const login = async () => {
-        const users = await apiService.getUserByEmail(loginForm.email);
+        const users = await getUserByEmail(loginForm.email);
         if (users.length > 0) {
             const { email, role } = users[0];
             localStorage.setItem('userName', loginForm.email);
@@ -48,7 +48,7 @@ const Login = () => {
                 </CardContent>
                 <CardActions>
                     <Button variant="contained" onClick={login}>Login</Button>
-                    <Button variant="contained" className="google-btn" onClick={apiService.signInWithGoogle}>Login With Google</Button>
+                    <Button variant="contained" className="google-btn" onClick={signInWithGoogle}>Login With Google</Button>
                 </CardActions>
             </Card>
         </>

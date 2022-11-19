@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import * as apiService from '../services/api.service';
+import { createAttendance, filterAttendance } from '../services/api.service';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -32,14 +32,14 @@ const Attendance = () => {
         })
     }
 
-    const createAttendance = async () => {
+    const saveAttendance = async () => {
         const startDate = new Date(attendanceForm.date);
         startDate.setHours(0, 0, 0, 0);
         const endDate = new Date(attendanceForm.date);
         endDate.setDate(endDate.getDate() + 1);
-        const existingRecords = await apiService.filterAttendance(attendanceForm.email, startDate, endDate);
+        const existingRecords = await filterAttendance(attendanceForm.email, startDate, endDate);
         if (existingRecords.length === 0) {
-            await apiService.createAttendance(attendanceForm);
+            await createAttendance(attendanceForm);
             addNotification('Attendance saved successfully', 'success')
         } else {
             addNotification('Attendance record already exist', 'error')
@@ -80,7 +80,7 @@ const Attendance = () => {
                         </div>
                     </CardContent>
                     <CardActions>
-                        <Button variant="contained" onClick={createAttendance}>Proceed</Button>
+                        <Button variant="contained" onClick={saveAttendance}>Proceed</Button>
                     </CardActions>
                 </LocalizationProvider>
             </Card>
