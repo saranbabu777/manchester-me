@@ -5,11 +5,13 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { FormControl } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import useNotification from '../common/hooks/useNotification';
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
-    const [allUsers, setAllUsers] = useState([]);
+    const [search, setSearch] = useState("");
     const navigate = useNavigate();
+    const { addNotification } = useNotification();
 
     useEffect(() => {
         loadUserList();
@@ -17,20 +19,12 @@ const UserList = () => {
 
     const loadUserList = async () => {
         const data = await getUsers();
-        setAllUsers((prev) => {
-            return data;
-        });
         setUsers((prev) => {
             return data;
         });
     }
 
-    const searchUsers = async (search) => {
-        const filteredUsers = allUsers.filter(x => x.name.toLowerCase().includes(search.toLowerCase()))
-        setUsers((prev) => {
-            return filteredUsers;
-        });
-    }
+    const searchUsers = () => users ? users.filter(x => x.name.toLowerCase().includes(search.toLowerCase())) : []
 
     const viewUser = (email) => {
         navigate(`/user-details/${email}`);
@@ -40,16 +34,23 @@ const UserList = () => {
         navigate(`/add-user`);
     }
 
+    const removeUser = (event, id) => {
+        event.stopPropagation();
+        deleteUser(id);
+        addNotification('User deleted successfully', 'success');
+        loadUserList();
+    }
+
     return (
         <div className='user-list'>
             <FormControl>
-                <TextField label="Search User" variant="outlined" onChange={(e) => { searchUsers(e.target.value); }} />
+                <TextField label="Search User" variant="outlined" onChange={(e) => { setSearch(e.target.value); }} />
             </FormControl>
             {
-                users.map((user, key) => {
+                searchUsers().map((user, key) => {
                     return <div className='user-block' key={"user" + key} onClick={() => { viewUser(user.email); }}>
                         <p>{user.name}</p>
-                        <DeleteIcon onClick={(e) => { e.stopPropagation(); deleteUser(user.id); }} />
+                        <DeleteIcon onClick={(e) => { removeUser(e, user.id); }} />
                     </div>
                 })
             }

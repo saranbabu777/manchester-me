@@ -89,3 +89,13 @@ export const signInWithGoogle = async () => {
 export const logOut = async () => {
     await signOut(auth)
 }
+
+export const clearCollection = async () => {
+    const collectionRef = attendanceCollectionRef;
+    const collectionName = "attendance";
+    const data = await getDocs(collectionRef);
+    data.forEach(async (item) => {
+        const document = doc(db, collectionName, item.id);
+        await deleteDoc(document)
+    });
+}

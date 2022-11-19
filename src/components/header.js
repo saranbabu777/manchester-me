@@ -120,6 +120,10 @@ const Header = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
+                            {
+                                // Just use while testing
+                                /* <MenuItem onClick={clearCollection}>clear collection</MenuItem> */
+                            }
                             <MenuItem onClick={handleClose}>{auth.email}</MenuItem>
                             <MenuItem onClick={signOut}>Sign Out</MenuItem>
                         </Menu>
