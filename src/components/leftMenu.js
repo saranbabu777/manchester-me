@@ -3,7 +3,7 @@ import { Box, Divider, List, ListItem, ListItemButton } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from "react-router-dom";
-import { Dashboard, Login, Money, Person, PlaylistAdd, PlusOne } from '@mui/icons-material';
+import { Dashboard, Login, Money, Person, PlusOne } from '@mui/icons-material';
 import useAuthentication from '../common/hooks/useAuthentication';
 
 const LeftMenu = (props) => {
@@ -35,13 +35,13 @@ const LeftMenu = (props) => {
                     (auth?.role === permission.ADMIN) &&
                     <>
                         <List>
-                            <ListItem key='User List' disablePadding>
+                            <ListItem key='Dashboard' disablePadding>
                                 <Link to="/">
                                     <ListItemButton>
                                         <ListItemIcon>
-                                            <PlaylistAdd />
+                                            <Dashboard />
                                         </ListItemIcon>
-                                        <ListItemText primary='User List' />
+                                        <ListItemText primary='Dashboard' />
                                     </ListItemButton>
                                 </Link>
                             </ListItem>
@@ -80,13 +80,13 @@ const LeftMenu = (props) => {
                     (auth?.role === permission.STAFF) &&
                     <>
                         <List>
-                            <ListItem key='Staff Dashboard' disablePadding>
-                                <Link to="/dashboard">
+                            <ListItem key='Dashboard' disablePadding>
+                                <Link to="/">
                                     <ListItemButton>
                                         <ListItemIcon>
                                             <Dashboard />
                                         </ListItemIcon>
-                                        <ListItemText primary='Staff Dashboard' />
+                                        <ListItemText primary='Dashboard' />
                                     </ListItemButton>
                                 </Link>
                             </ListItem>
