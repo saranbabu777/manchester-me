@@ -34,6 +34,7 @@ function App() {
                 <Route path="/manage-leave" element={<ManageLeave />} />
                 <Route path="/salary" element={<Salary />} />
                 <Route path="/attendance/:status" element={<Attendance />} />
+                <Route path="/attendance" element={<Attendance />} />
               </Routes>
             </div>
             <Notification />

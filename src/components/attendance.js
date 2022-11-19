@@ -8,6 +8,7 @@ import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useParams } from 'react-router-dom';
 import useNotification from '../common/hooks/useNotification';
+import useAuthentication from '../common/hooks/useAuthentication';
 
 const Attendance = () => {
     const [attendanceForm, setAttendanceForm] = useState({
@@ -17,14 +18,17 @@ const Attendance = () => {
     });
     const params = useParams();
     const { addNotification } = useNotification();
+    const { auth, permission } = useAuthentication();
 
     useEffect(() => {
-        const currentUserObject = localStorage.getItem('man-client-user-inf');
-        const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
-        const status = params.status.toString();
-        setAttendanceForm((prev) => {
-            return { ...prev, email: email || "", status };
-        });
+        if (auth?.role === permission.STAFF) {
+            const currentUserObject = localStorage.getItem('man-client-user-inf');
+            const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+            const status = params.status && params.status.toString();
+            setAttendanceForm((prev) => {
+                return { ...prev, email: email || "", status: status || "" };
+            });
+        }
     }, [])
 
     const handleChange = (change) => {
@@ -53,9 +57,14 @@ const Attendance = () => {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <CardContent>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Hello, {attendanceForm.email}
+                            Manage Attendance
                         </Typography>
                         <div className='attendance-form'>
+                            {auth?.role === permission.ADMIN &&
+                                <FormControl className='form-field'>
+                                    <TextField label="Email" variant="outlined" value={attendanceForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
+                                </FormControl>
+                            }
                             <FormControl className='form-field'>
                                 <DesktopDatePicker
                                     label="Select Date"

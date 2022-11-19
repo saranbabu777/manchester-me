@@ -16,7 +16,8 @@ const AuthProvider = ({ children }) => {
     const contextValue = {
         auth,
         addAuth: useCallback((email, role) => addAuth(email, role), []),
-        removeAuth: useCallback(() => removeAuth(), [])
+        removeAuth: useCallback(() => removeAuth(), []),
+        permission: { STAFF: 'staff', ADMIN: 'admin' }
     };
 
     return (

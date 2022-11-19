@@ -15,7 +15,7 @@ import { auth as firebaseAuth } from '../firebase.config';
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const { auth, addAuth } = useAuthentication();
+    const { auth, addAuth, removeAuth } = useAuthentication();
     const { addNotification } = useNotification();
 
     useEffect(() => {
@@ -39,6 +39,12 @@ const Header = () => {
         } else {
             addNotification('User does not exist!', 'error');
         }
+    }
+
+    const signOut = () => {
+        removeAuth();
+        logOut();
+        handleClose();
     }
 
     const handleMenu = (event) => {
@@ -115,7 +121,7 @@ const Header = () => {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={handleClose}>{auth.email}</MenuItem>
-                            <MenuItem onClick={() => { logOut(); handleClose(); }}>Sign Out</MenuItem>
+                            <MenuItem onClick={signOut}>Sign Out</MenuItem>
                         </Menu>
                     </div>
                 )}
