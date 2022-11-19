@@ -1,30 +1,37 @@
+import { IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { filterAttendance } from '../services/api.service';
+import { NavigateBefore, NavigateNext } from '@mui/icons-material';
 
 const Calendar = (props) => {
     const [attendance, setAttendance] = useState([]);
     const [daysOfMonth, setDaysOfMonth] = useState([]);
+    const [dateInCalendar, setDateInCalendar] = useState(new Date());
 
     useEffect(() => {
-        const now = new Date();
-        const days = getAllDaysInMonth(now.getFullYear(), now.getMonth())
-        setDaysOfMonth((prev) => {
-            return days;
-        })
+        calcDaysOfMonth(dateInCalendar);
     }, [])
 
     useEffect(() => {
-        const getAttendanceDetails = async () => {
-            const date = new Date(), y = date.getFullYear(), m = date.getMonth();
-            const monthStartDate = new Date(y, m, 1);
-            const monthEndDate = new Date(y, m + 1, 0);
-            const data = await filterAttendance(props.email, monthStartDate, monthEndDate);
-            setAttendance((prev) => {
-                return data;
-            });
-        }
-        getAttendanceDetails();
+        getAttendanceDetails(dateInCalendar);
     }, [props.email])
+
+    const calcDaysOfMonth = (date) => {
+        const days = getAllDaysInMonth(date.getFullYear(), date.getMonth())
+        setDaysOfMonth((prev) => {
+            return days;
+        })
+    }
+
+    const getAttendanceDetails = async (date) => {
+        const y = date.getFullYear(), m = date.getMonth();
+        const monthStartDate = new Date(y, m, 1);
+        const monthEndDate = new Date(y, m + 1, 0);
+        const data = await filterAttendance(props.email, monthStartDate, monthEndDate);
+        setAttendance((prev) => {
+            return data;
+        });
+    }
 
     const getAllDaysInMonth = (year, month) => {
         const date = new Date(year, month, 1);
@@ -51,12 +58,49 @@ const Calendar = (props) => {
         return weeks;
     }
 
+    const handleClick = (increment) => {
+        const date = new Date(dateInCalendar);
+        const month = date.getMonth() + increment;
+        const firstDay = 1;
+        const newDate = new Date(date.getFullYear(), month, firstDay);
+        setDateInCalendar((prev) => {
+            return newDate;
+        })
+        calcDaysOfMonth(newDate);
+        getAttendanceDetails(newDate);
+    }
+
+    const formattedDate = () => {
+        const dateArray = dateInCalendar ? dateInCalendar.toDateString().split(' ') : ['', '', '', ''];
+        return dateArray[1] + ' ' + dateArray[3];
+    }
+
     const present = attendance.filter(x => x.status === 'IN').map(x => x.date.getDate());
+
     const absent = attendance.filter(x => x.status === 'OUT').map(x => x.date.getDate());
 
     return (
         <>
             <section className='grid calendar-view'>
+                <div className='calendar-action-btn'>
+                    <IconButton onClick={() => { handleClick(-1); }}
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                    >
+                        <NavigateBefore />
+                    </IconButton>
+                    {formattedDate()}
+                    <IconButton onClick={() => { handleClick(1); }}
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                    >
+                        <NavigateNext />
+                    </IconButton>
+                </div>
                 <header>
                     <div className="col">Su</div>
                     <div className="col">Mo</div>

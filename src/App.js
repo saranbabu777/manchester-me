@@ -14,7 +14,7 @@ import NotificationProvider from './common/providers/notificationProvider';
 import Notification from './components/notification';
 import AuthProvider from './common/providers/authProvider';
 import Dashboard from './components/dashboard';
-import { PrivateRoute } from './components/privateRoute';
+import PrivateRoute from './components/privateRoute';
 
 function App() {
   return (

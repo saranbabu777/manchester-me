@@ -49,7 +49,7 @@ const UserList = () => {
             {
                 searchUsers().map((user, key) => {
                     return <div className='user-block' key={"user" + key} onClick={() => { viewUser(user.email); }}>
-                        <p>{user.name}</p>
+                        <p>{user.name} ({user.role})</p>
                         <DeleteIcon onClick={(e) => { removeUser(e, user.id); }} />
                     </div>
                 })

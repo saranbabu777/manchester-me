@@ -17,14 +17,15 @@ const LeftMenu = (props) => {
                 onClick={props.toggleDrawer(false)}
                 onKeyDown={props.toggleDrawer(false)}
             >
+                {/* Comment LOGIN menu in PROD */}
                 <List>
-                    <ListItem key='Mock Login' disablePadding>
+                    <ListItem key='Login' disablePadding>
                         <Link to="/login">
                             <ListItemButton>
                                 <ListItemIcon>
                                     <Login />
                                 </ListItemIcon>
-                                <ListItemText primary='Mock Login' />
+                                <ListItemText primary='Login' />
                             </ListItemButton>
                         </Link>
                     </ListItem>
@@ -93,26 +94,26 @@ const LeftMenu = (props) => {
                         </List>
                         <Divider />
                         <List>
-                            <ListItem key='Manage Leave' disablePadding>
+                            <ListItem key='Manage Attendance' disablePadding>
                                 <Link to="/manage-leave">
                                     <ListItemButton>
                                         <ListItemIcon>
                                             <Person />
                                         </ListItemIcon>
-                                        <ListItemText primary='Manage Leave' />
+                                        <ListItemText primary='Manage Attendance' />
                                     </ListItemButton>
                                 </Link>
                             </ListItem>
                         </List>
                         <Divider />
                         <List>
-                            <ListItem key='Salary' disablePadding>
+                            <ListItem key='My Salary' disablePadding>
                                 <Link to="/salary">
                                     <ListItemButton>
                                         <ListItemIcon>
                                             <Money />
                                         </ListItemIcon>
-                                        <ListItemText primary='Salary' />
+                                        <ListItemText primary='My Salary' />
                                     </ListItemButton>
                                 </Link>
                             </ListItem>
