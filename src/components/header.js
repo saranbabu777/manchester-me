@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AccountCircle } from '@mui/icons-material';
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,16 +7,39 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import LeftMenu from './leftMenu';
 import useAuthentication from '../common/hooks/useAuthentication';
-import { logOut } from '../services/api.service';
+import { getUserByEmail, logOut } from '../services/api.service';
 import useNotification from '../common/hooks/useNotification';
 import { useNavigate } from 'react-router-dom';
-
+import { onAuthStateChanged } from "@firebase/auth";
+import { auth as firebaseAuth } from '../firebase.config';
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const { auth, removeAuth } = useAuthentication();
+    const { auth, addAuth, removeAuth } = useAuthentication();
     const { addNotification } = useNotification();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        /*Keep session on page reload*/
+        onAuthStateChanged(firebaseAuth, (currentUser) => {
+            if (currentUser) {
+                validateLogin(currentUser)
+            }
+        });
+    }, [])
+
+    const validateLogin = async (currentUser) => {
+        const { displayName, email, profilePic } = currentUser;
+        const users = await getUserByEmail(email);
+        if (users.length > 0) {
+            const { role } = users[0];
+            localStorage.setItem('man-client-user-inf', JSON.stringify({ displayName, email, profilePic }));
+            addAuth(email, role);
+            navigate(`/`);
+        } else {
+            addNotification('User does not exist!', 'error');
+        }
+    }
 
     const signOut = async () => {
         removeAuth();

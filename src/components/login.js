@@ -34,21 +34,7 @@ const Login = () => {
     }
 
     const loginWithGoogle = async () => {
-        const result = await signInWithGoogle();
-        validateLogin(result.user);
-    }
-
-    const validateLogin = async (currentUser) => {
-        const { displayName, email, profilePic } = currentUser;
-        const users = await getUserByEmail(email);
-        if (users.length > 0) {
-            const { role } = users[0];
-            localStorage.setItem('man-client-user-inf', JSON.stringify({ displayName, email, profilePic }));
-            addAuth(email, role);
-            navigate(`/`);
-        } else {
-            addNotification('User does not exist!', 'error');
-        }
+        await signInWithGoogle();
     }
 
     return (
