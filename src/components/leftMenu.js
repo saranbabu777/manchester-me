@@ -31,23 +31,23 @@ const LeftMenu = (props) => {
                     </ListItem>
                 </List>
                 <Divider />
+                <List>
+                    <ListItem key='Dashboard' disablePadding>
+                        <Link to="/">
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Dashboard />
+                                </ListItemIcon>
+                                <ListItemText primary='Dashboard' />
+                            </ListItemButton>
+                        </Link>
+                    </ListItem>
+                </List>
+                <Divider />
                 {
                     /* Menu Items Specific For Admin Role */
                     (auth?.role === permission.ADMIN) &&
                     <>
-                        <List>
-                            <ListItem key='Dashboard' disablePadding>
-                                <Link to="/">
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <Dashboard />
-                                        </ListItemIcon>
-                                        <ListItemText primary='Dashboard' />
-                                    </ListItemButton>
-                                </Link>
-                            </ListItem>
-                        </List>
-                        <Divider />
                         <List>
                             <ListItem key='Add payment' disablePadding>
                                 <Link to="/add-payment">
@@ -80,19 +80,6 @@ const LeftMenu = (props) => {
                     /* Menu Items Specific For Staff Role */
                     (auth?.role === permission.STAFF) &&
                     <>
-                        <List>
-                            <ListItem key='Dashboard' disablePadding>
-                                <Link to="/">
-                                    <ListItemButton>
-                                        <ListItemIcon>
-                                            <Dashboard />
-                                        </ListItemIcon>
-                                        <ListItemText primary='Dashboard' />
-                                    </ListItemButton>
-                                </Link>
-                            </ListItem>
-                        </List>
-                        <Divider />
                         <List>
                             <ListItem key='Manage Attendance' disablePadding>
                                 <Link to="/manage-leave">

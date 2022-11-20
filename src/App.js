@@ -27,11 +27,11 @@ function App() {
               <Routes>
                 <Route exact path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/add-user" element={<PrivateRoute><AddUser /></PrivateRoute>} />
-                <Route path="/user-details/:email" element={<PrivateRoute><UserDetails /></PrivateRoute>} />
+                <Route path="/add-user" element={<PrivateRoute role='admin'><AddUser /></PrivateRoute>} />
+                <Route path="/user-details/:email" element={<PrivateRoute role='admin'><UserDetails /></PrivateRoute>} />
                 <Route path="/add-payment" element={<PrivateRoute><AddPayment /></PrivateRoute>} />
-                <Route path="/manage-leave" element={<PrivateRoute><ManageLeave /></PrivateRoute>} />
-                <Route path="/salary" element={<PrivateRoute><Salary /></PrivateRoute>} />
+                <Route path="/manage-leave" element={<PrivateRoute role='staff'><ManageLeave /></PrivateRoute>} />
+                <Route path="/salary" element={<PrivateRoute role='staff'><Salary /></PrivateRoute>} />
                 <Route path="/attendance/:status" element={<PrivateRoute><Attendance /></PrivateRoute>} />
                 <Route path="/attendance" element={<PrivateRoute><Attendance /></PrivateRoute>} />
                 <Route path="*" element={<Navigate to="/login" replace />} />
