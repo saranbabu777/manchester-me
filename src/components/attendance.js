@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { createAttendance, filterAttendance } from '../services/api.service';
+import { createAttendance, filterAttendance, getUsers } from '../services/api.service';
 import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { InputLabel, FormControl, Card, CardContent, Typography, CardActions, TextField } from "@mui/material";
+import { InputLabel, FormControl, Card, CardContent, Typography, CardActions, TextField, Autocomplete } from "@mui/material";
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useParams } from 'react-router-dom';
@@ -16,6 +16,7 @@ const Attendance = () => {
         date: new Date(),
         status: ""
     });
+    const [users, setUsers] = useState([]);
     const params = useParams();
     const { addNotification } = useNotification();
     const { auth, permission } = useAuthentication();
@@ -28,6 +29,14 @@ const Attendance = () => {
             setAttendanceForm((prev) => {
                 return { ...prev, email: email || "", status: status || "" };
             });
+        } else {
+            const loadUserData = async () => {
+                const data = await getUsers();
+                setUsers((prev) => {
+                    return data.map(e => ({ id: e.email, label: e.name }));
+                });
+            }
+            loadUserData();
         }
     }, [])
 
@@ -41,6 +50,7 @@ const Attendance = () => {
         const startDate = new Date(attendanceForm.date);
         startDate.setHours(0, 0, 0, 0);
         const endDate = new Date(attendanceForm.date);
+        endDate.setHours(0, 0, 0, 0);
         endDate.setDate(endDate.getDate() + 1);
         const existingRecords = await filterAttendance(attendanceForm.email, startDate, endDate);
         if (existingRecords.length === 0) {
@@ -61,8 +71,16 @@ const Attendance = () => {
                         </Typography>
                         <div className='attendance-form'>
                             {auth?.role === permission.ADMIN &&
-                                <FormControl className='form-field'>
-                                    <TextField label="Email" variant="outlined" value={attendanceForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
+                                <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                                    <Autocomplete
+                                        disablePortal
+                                        onChange={(event, newValue) => {
+                                            handleChange({ email: newValue.id });
+                                        }}
+                                        options={users}
+                                        renderInput={(params) => <TextField {...params} label="User" />}
+                                    />
+
                                 </FormControl>
                             }
                             <FormControl className='form-field'>

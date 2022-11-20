@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { createPayment } from '../services/api.service';
+import { createPayment, getUsers } from '../services/api.service';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { FormControl, InputLabel } from "@mui/material";
+import { Autocomplete, FormControl, InputLabel } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -38,6 +38,7 @@ const AddPayment = () => {
         forMonth: "",
         forYear: 0
     });
+    const [users, setUsers] = useState([]);
     const { addNotification } = useNotification();
     const { auth, permission } = useAuthentication();
 
@@ -48,6 +49,14 @@ const AddPayment = () => {
             setPaymentForm((prev) => {
                 return { ...prev, email: email || "" };
             });
+        } else {
+            const loadUserData = async () => {
+                const data = await getUsers();
+                setUsers((prev) => {
+                    return data.map(e => ({ id: e.email, label: e.name }));
+                });
+            }
+            loadUserData();
         }
     }, [])
 
@@ -71,8 +80,16 @@ const AddPayment = () => {
                     </Typography>
                     <div className='payement-form'>
                         {auth?.role === permission.ADMIN &&
-                            <FormControl className='form-field'>
-                                <TextField label="Email" variant="outlined" value={paymentForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
+                            <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                                <Autocomplete
+                                    disablePortal
+                                    onChange={(event, newValue) => {
+                                        handleChange({ email: newValue.id });
+                                    }}
+                                    options={users}
+                                    renderInput={(params) => <TextField {...params} label="User" />}
+                                />
+
                             </FormControl>
                         }
                         <FormControl className='form-field' sx={{ minWidth: 120 }}>

@@ -24,6 +24,7 @@ const StaffDashboard = () => {
         const startDate = new Date(attendanceForm.date);
         startDate.setHours(0, 0, 0, 0);
         const endDate = new Date(attendanceForm.date);
+        endDate.setHours(0, 0, 0, 0);
         endDate.setDate(endDate.getDate() + 1);
         const existingRecords = await filterAttendance(attendanceForm.email, startDate, endDate);
         if (existingRecords.length === 0) {

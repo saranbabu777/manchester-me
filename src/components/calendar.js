@@ -26,8 +26,8 @@ const Calendar = (props) => {
     const getAttendanceDetails = async (date) => {
         const y = date.getFullYear(), m = date.getMonth();
         const monthStartDate = new Date(y, m, 1);
-        const monthEndDate = new Date(y, m + 1, 0);
-        const data = await filterAttendance(props.email, monthStartDate, monthEndDate);
+        const nextMonthStartDate = new Date(y, m + 1, 1);
+        const data = await filterAttendance(props.email, monthStartDate, nextMonthStartDate);
         setAttendance((prev) => {
             return data;
         });
