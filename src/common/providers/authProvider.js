@@ -8,6 +8,7 @@ export const AuthContext = React.createContext({
 
 const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState(null);
+    const [authLoading, setAuthLoading] = useState(false);
 
     const removeAuth = () => setAuth(null);
 
@@ -17,6 +18,8 @@ const AuthProvider = ({ children }) => {
         auth,
         addAuth: useCallback((email, role) => addAuth(email, role), []),
         removeAuth: useCallback(() => removeAuth(), []),
+        authLoading,
+        setAuthLoading: useCallback((loading) => setAuthLoading(loading), []),
         permission: { STAFF: 'staff', ADMIN: 'admin' }
     };
 

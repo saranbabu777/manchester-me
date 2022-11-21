@@ -5,7 +5,6 @@ import UserList from './userList';
 
 const Dashboard = () => {
     const { auth, permission } = useAuthentication();
-
     return (
         <>
             {auth?.role === permission.ADMIN &&

@@ -15,15 +15,18 @@ import { auth as firebaseAuth } from '../firebase.config';
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
-    const { auth, addAuth, removeAuth } = useAuthentication();
+    const { auth, addAuth, removeAuth, setAuthLoading } = useAuthentication();
     const { addNotification } = useNotification();
     const navigate = useNavigate();
 
     useEffect(() => {
+        setAuthLoading(true);
         /*Keep session on page reload*/
         onAuthStateChanged(firebaseAuth, (currentUser) => {
             if (currentUser) {
-                validateLogin(currentUser)
+                validateLogin(currentUser);
+            } else {
+                setAuthLoading(false);
             }
         });
     }, [])
@@ -36,8 +39,10 @@ const Header = () => {
             localStorage.setItem('man-client-user-inf', JSON.stringify({ displayName, email, profilePic }));
             addAuth(email, role);
             navigate(`/`);
+            setAuthLoading(false);
         } else {
             addNotification('User does not exist!', 'error');
+            setAuthLoading(false);
         }
     }
 

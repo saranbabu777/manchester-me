@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { FormControl, Card, CardContent, Typography, CardActions } from "@mui/material";
+import { FormControl, Card, CardContent, Typography, CardActions, Backdrop, CircularProgress } from "@mui/material";
 import { useNavigate } from 'react-router-dom/dist';
 import useAuthentication from '../common/hooks/useAuthentication';
 import { getUserByEmail, signInWithGoogle } from '../services/api.service';
@@ -14,6 +14,7 @@ const Login = () => {
     const navigate = useNavigate();
     const { addAuth } = useAuthentication();
     const { addNotification } = useNotification();
+    const { authLoading } = useAuthentication();
 
     const handleChange = (change) => {
         setLoginForm(prev => {
@@ -39,22 +40,30 @@ const Login = () => {
 
     return (
         <>
-            <Card sx={{ minWidth: 275 }}>
-                <CardContent>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        Test Mode
-                    </Typography>
-                    <div className='login-form'>
-                        <FormControl className='form-field'>
-                            <TextField label="Enter an email id" variant="outlined" value={loginForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
-                        </FormControl>
-                    </div>
-                </CardContent>
-                <CardActions>
-                    <Button variant="contained" onClick={login}>Login</Button>
-                    <Button variant="contained" className="google-btn" onClick={loginWithGoogle}>Login With Google</Button>
-                </CardActions>
-            </Card>
+            {authLoading ?
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={authLoading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop> :
+                <Card sx={{ minWidth: 275 }}>
+                    <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                            Test Mode
+                        </Typography>
+                        <div className='login-form'>
+                            <FormControl className='form-field'>
+                                <TextField label="Enter an email id" variant="outlined" value={loginForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
+                            </FormControl>
+                        </div>
+                    </CardContent>
+                    <CardActions>
+                        <Button variant="contained" onClick={login}>Login</Button>
+                        <Button variant="contained" className="google-btn" onClick={loginWithGoogle}>Login With Google</Button>
+                    </CardActions>
+                </Card>
+            }
         </>
     )
 }
