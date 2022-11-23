@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { FormControl } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Add } from '@mui/icons-material';
 import useNotification from '../common/hooks/useNotification';
 
 const UserList = () => {
@@ -54,7 +55,9 @@ const UserList = () => {
                     </div>
                 })
             }
-            <Button className='add-user-btn' variant="contained" onClick={addUser}>Add Staff</Button>
+            <Button className='add-user-btn' variant="contained" onClick={addUser}>
+                <Add /><span>Add Staff</span>
+            </Button>
         </div>
     )
 }

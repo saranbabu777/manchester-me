@@ -5,12 +5,13 @@ import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import { Autocomplete, FormControl, InputLabel } from "@mui/material";
+import { Autocomplete, FormControl, FormHelperText, InputLabel } from "@mui/material";
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import useNotification from '../common/hooks/useNotification';
 import useAuthentication from '../common/hooks/useAuthentication';
+import useForm from '../common/hooks/useForm';
 
 const yearList = [2022, 2023]
 const monthList = [
@@ -60,14 +61,35 @@ const AddPayment = () => {
         }
     }, [])
 
-    const handleChange = (change) => {
-        setPaymentForm(prev => {
-            return { ...prev, ...change };
-        })
+    const validator = (fieldName, fieldValue) => {
+        let error = false;
+        switch (fieldName) {
+            case "email":
+            case "date":
+            case "type":
+            case "sum":
+            case "mode":
+            case "forMonth":
+            case "forYear":
+                error = validateRequired(fieldValue);
+                break;
+            default:
+        }
+        return error;
+    };
+
+    const validateRequired = (fieldValue) => {
+        if (!fieldValue) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    const { handleChange, handleBlur, state, errors } = useForm({ initState: paymentForm, validator })
+
     const savePayment = async () => {
-        await createPayment(paymentForm);
+        await createPayment(state);
         addNotification('Payment added successfully', 'success')
     }
 
@@ -80,57 +102,88 @@ const AddPayment = () => {
                     </Typography>
                     <div className='payement-form'>
                         {auth?.role === permission.ADMIN &&
-                            <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                            <FormControl className='form-field' sx={{ minWidth: 120 }} error={errors.email}>
                                 <Autocomplete
                                     disablePortal
-                                    onChange={(event, newValue) => {
-                                        handleChange({ email: newValue.id });
-                                    }}
+                                    name="email"
+                                    required
+                                    value={state.email}
+                                    onChange={(e, newValue) => { handleChange({ target: { name: 'email', value: newValue && newValue.id } }) }}
+                                    onBlur={(e) => { handleBlur({ target: { name: 'email' } }) }}
+                                    error={errors.email}
                                     options={users}
                                     renderInput={(params) => <TextField {...params} label="User" />}
                                 />
-
+                                {errors.email &&
+                                    <FormHelperText>User is Required</FormHelperText>
+                                }
                             </FormControl>
                         }
-                        <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                        <FormControl className='form-field' sx={{ minWidth: 120 }} error={errors.type}>
                             <InputLabel id="type-label">Type</InputLabel>
                             <Select
                                 labelId="type-label"
                                 id="type"
-                                value={paymentForm.type}
                                 label="Type"
-                                onChange={(e) => { handleChange({ type: e.target.value }); }}
+                                name="type"
+                                required
+                                value={state.type}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.type}
                             >
                                 {auth?.role === permission.ADMIN &&
                                     <MenuItem value='salary'>Salary</MenuItem>
                                 }
                                 <MenuItem value='advance'>Advance</MenuItem>
                             </Select>
+                            {errors.type &&
+                                <FormHelperText>Type is Required</FormHelperText>
+                            }
                         </FormControl>
                         <FormControl className='form-field'>
-                            <TextField label="Amount" variant="outlined" value={paymentForm.sum} onChange={(e) => { handleChange({ sum: e.target.value }); }} />
+                            <TextField label="Amount" variant="outlined"
+                                name="sum"
+                                required
+                                value={state.sum}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.sum}
+                                helperText={errors.sum && 'Amount is required'}
+                            />
                         </FormControl>
-                        <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                        <FormControl className='form-field' sx={{ minWidth: 120 }} error={errors.mode}>
                             <InputLabel id="mode-label">Mode</InputLabel>
                             <Select
                                 labelId="mode-label"
                                 id="mode"
-                                value={paymentForm.mode}
                                 label="Mode"
-                                onChange={(e) => { handleChange({ mode: e.target.value }); }}
+                                name="mode"
+                                required
+                                value={state.mode}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.mode}
                             >
                                 <MenuItem value='cash'>Cash</MenuItem>
                                 <MenuItem value='online'>Online</MenuItem>
                             </Select>
+                            {errors.mode &&
+                                <FormHelperText>Mode is Required</FormHelperText>
+                            }
                         </FormControl>
-                        <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                        <FormControl className='form-field' sx={{ minWidth: 120 }} error={errors.forYear}>
                             <InputLabel id="forYear-label">Year</InputLabel>
                             <Select
                                 labelId="forYear-label"
                                 id="forYear"
-                                value={paymentForm.forYear}
                                 label="For Year"
-                                onChange={(e) => { handleChange({ forYear: e.target.value }); }}
+                                name="forYear"
+                                required
+                                value={state.forYear}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.forYear}
                             >
                                 {
                                     yearList.map((yr, key) => {
@@ -140,15 +193,22 @@ const AddPayment = () => {
                                     })
                                 }
                             </Select>
+                            {errors.forYear &&
+                                <FormHelperText>For Year is Required</FormHelperText>
+                            }
                         </FormControl>
-                        <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                        <FormControl className='form-field' sx={{ minWidth: 120 }} error={errors.forMonth}>
                             <InputLabel id="forMonth-label">Month</InputLabel>
                             <Select
                                 labelId="forMonth-label"
                                 id="forMonth"
-                                value={paymentForm.forMonth}
                                 label="For Month"
-                                onChange={(e) => { handleChange({ forMonth: e.target.value }); }}
+                                name="forMonth"
+                                required
+                                value={state.forMonth}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.forMonth}
                             >
                                 {
                                     monthList.map((mon, key) => {
@@ -158,6 +218,9 @@ const AddPayment = () => {
                                     })
                                 }
                             </Select>
+                            {errors.forMonth &&
+                                <FormHelperText>For Month is Required</FormHelperText>
+                            }
                         </FormControl>
                     </div>
                 </CardContent>
