@@ -35,7 +35,13 @@ export const filterPayment = async (email, month, year) => {
     const q = query(paymentCollectionRef, where("email", "==", email), where("forMonth", "==", month), where("forYear", "==", year))
     const data = await getDocs(q);
     const parsedPayment = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => (
-        { ...doc, date: doc.date.toDate(), lastUpdatedOn: doc.lastUpdatedOn ? doc.lastUpdatedOn.toDate() : '' }
+        {
+            ...doc,
+            date: doc.date.toDate(),
+            lastUpdatedOn: doc.lastUpdatedOn ? doc.lastUpdatedOn.toDate() : '',
+            displayDate: doc.date.toDate().toDateString(),
+            displayLastUpdatedOn: doc.lastUpdatedOn ? doc.lastUpdatedOn.toDate().toDateString() : ''
+        }
     ));
     return parsedPayment;
 }

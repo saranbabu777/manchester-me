@@ -17,14 +17,6 @@ import useForm from '../common/hooks/useForm';
 
 
 const AddUser = () => {
-    const [user, setUser] = useState({
-        name: "",
-        email: "",
-        role: "",
-        phone: "",
-        doj: "",
-        grossSalary: 0,
-    })
     const { addNotification } = useNotification();
 
     const validator = (fieldName, fieldValue) => {
@@ -51,7 +43,16 @@ const AddUser = () => {
         }
     }
 
-    const { handleChange, handleBlur, state, errors } = useForm({ initState: user, validator })
+    const { handleChange, handleBlur, state, errors } = useForm({
+        initState: {
+            name: "",
+            email: "",
+            role: "",
+            phone: "",
+            doj: "",
+            grossSalary: 0,
+        }, validator
+    })
 
     const saveUser = async () => {
         const users = await getUserByEmail(state.email);

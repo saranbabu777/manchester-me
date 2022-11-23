@@ -24,12 +24,12 @@ const monthList = [
 ]
 const monthsShort = [`jan`, `feb`, `mar`, `apr`, `may`, `jun`, `jul`, `aug`, `sep`, `oct`, `nov`, `dec`]
 const columns = [
-    { field: 'date', headerName: 'Date' },
+    { field: 'displayDate', headerName: 'Date', width: 150 },
     { field: 'type', headerName: 'Type' },
     { field: 'sum', headerName: 'Sum' },
     { field: 'mode', headerName: 'Mode' },
-    { field: 'lastUpdatedBy', headerName: 'Last Updated User' },
-    { field: 'lastUpdatedOn', headerName: 'Last Updated Date' }
+    { field: 'lastUpdatedBy', headerName: 'Last Updated User', width: 250 },
+    { field: 'displayLastUpdatedOn', headerName: 'Last Updated Date', width: 150 }
 ]
 
 const PaymentDetails = (props) => {

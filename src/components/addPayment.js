@@ -32,15 +32,6 @@ const monthList = [
 ]
 
 const AddPayment = () => {
-    const [paymentForm, setPaymentForm] = useState({
-        email: "",
-        date: new Date(),
-        type: "",
-        sum: 0,
-        mode: "",
-        forMonth: "",
-        forYear: 0
-    });
     const [users, setUsers] = useState([]);
     const { addNotification } = useNotification();
     const { auth, permission } = useAuthentication();
@@ -49,9 +40,7 @@ const AddPayment = () => {
         if (auth?.role === permission.STAFF) {
             const currentUserObject = localStorage.getItem('man-client-user-inf');
             const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
-            setPaymentForm((prev) => {
-                return { ...prev, email: email || "" };
-            });
+            handleChange({ target: { name: 'email', value: email || "" } })
         } else {
             const loadUserData = async () => {
                 const data = await getUsers();
@@ -88,7 +77,17 @@ const AddPayment = () => {
         }
     }
 
-    const { handleChange, handleBlur, state, errors } = useForm({ initState: paymentForm, validator })
+    const { handleChange, handleBlur, state, errors } = useForm({
+        initState: {
+            email: "",
+            date: new Date(),
+            type: "",
+            sum: 0,
+            mode: "",
+            forMonth: "",
+            forYear: 0
+        }, validator
+    })
 
     const savePayment = async () => {
         await createPayment(state);
