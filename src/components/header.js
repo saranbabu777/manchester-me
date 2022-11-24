@@ -7,7 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Drawer from '@mui/material/Drawer';
 import LeftMenu from './leftMenu';
 import useAuthentication from '../common/hooks/useAuthentication';
-import { getUserByEmail, logOut } from '../services/api.service';
+import { clearCollection, getUserByEmail, logOut } from '../services/api.service';
 import useNotification from '../common/hooks/useNotification';
 import { useNavigate } from 'react-router-dom';
 import { onAuthStateChanged } from "@firebase/auth";
@@ -128,9 +128,8 @@ const Header = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >
-                            {
-                                // Just use while testing
-                                /* <MenuItem onClick={clearCollection}>clear collection</MenuItem> */
+                            {(process.env.NODE_ENV === 'development') &&
+                                <MenuItem onClick={clearCollection}>clear collection</MenuItem>
                             }
                             <MenuItem onClick={handleClose}>{auth.email}</MenuItem>
                             <MenuItem onClick={signOut}>Sign Out</MenuItem>

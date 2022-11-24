@@ -48,18 +48,20 @@ const Login = () => {
                     <CircularProgress color="inherit" />
                 </Backdrop> :
                 <Card sx={{ minWidth: 275 }}>
-                    <CardContent>
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Test Mode
-                        </Typography>
-                        <div className='login-form'>
-                            <FormControl className='form-field'>
-                                <TextField label="Enter an email id" variant="outlined" value={loginForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
-                            </FormControl>
-                        </div>
-                    </CardContent>
+                    {(process.env.NODE_ENV === 'development') &&
+                        <CardContent>
+                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                Development Mode
+                            </Typography>
+                            <div className='login-form'>
+                                <FormControl className='form-field'>
+                                    <TextField label="Enter an email id" variant="outlined" value={loginForm.email} onChange={(e) => { handleChange({ email: e.target.value }); }} />
+                                </FormControl>
+                            </div>
+                        </CardContent>
+                    }
                     <CardActions>
-                        <Button variant="contained" onClick={login}>Login</Button>
+                        {(process.env.NODE_ENV === 'development') && <Button variant="contained" onClick={login}>Login</Button>}
                         <Button variant="contained" className="google-btn" onClick={loginWithGoogle}>Login With Google</Button>
                     </CardActions>
                 </Card>

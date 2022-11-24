@@ -17,20 +17,23 @@ const LeftMenu = (props) => {
                 onClick={props.toggleDrawer(false)}
                 onKeyDown={props.toggleDrawer(false)}
             >
-                {/* Comment LOGIN menu in PROD */}
-                <List>
-                    <ListItem key='Login' disablePadding>
-                        <Link to="/login">
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Login />
-                                </ListItemIcon>
-                                <ListItemText primary='Login' />
-                            </ListItemButton>
-                        </Link>
-                    </ListItem>
-                </List>
-                <Divider />
+                {(process.env.NODE_ENV === 'development') &&
+                    <>
+                        <List>
+                            <ListItem key='Login' disablePadding>
+                                <Link to="/login">
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <Login />
+                                        </ListItemIcon>
+                                        <ListItemText primary='Login' />
+                                    </ListItemButton>
+                                </Link>
+                            </ListItem>
+                        </List>
+                        <Divider />
+                    </>
+                }
                 {
                     auth &&
                     <>
