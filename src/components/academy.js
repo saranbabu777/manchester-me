@@ -7,11 +7,11 @@ import { createStudent, getLastStudentRecord, getStudents } from '../services/ap
 import AddStudentForm from './addStudentForm';
 
 const columns = [
-    { field: 'studentId', headerName: 'Reg. No', width: 150 },
-    { field: 'name', headerName: 'Name', width: 150 },
+    { field: 'studentId', headerName: 'Reg. No', width: 100 },
+    { field: 'name', headerName: 'Name', width: 250 },
     { field: 'phone', headerName: 'Phone', width: 150 },
-    { field: 'doj', headerName: 'Date of Joining', width: 110 },
-    { field: 'active', headerName: 'Active', width: 110 }
+    { field: 'doj', headerName: 'Date of Joining', width: 150 },
+    { field: 'active', headerName: 'Active', width: 100 }
 ]
 
 const Academy = () => {
@@ -55,6 +55,7 @@ const Academy = () => {
                     </Typography>
                     <div style={{ height: 600, width: '100%' }}>
                         <DataGrid
+                            sx={{ textTransform: 'capitalize' }}
                             rows={students}
                             columns={columns}
                             pageSize={10}

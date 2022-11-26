@@ -7,15 +7,14 @@ import { createFees, getFeesByStudentId } from '../services/api.service';
 import AddFeesForm from './addFeesForm';
 
 const columns = [
-    { field: 'year', headerName: 'Year', width: 150 },
-    { field: 'month', headerName: 'Month', width: 150 },
-    { field: 'for', headerName: 'For', width: 110 },
-    { field: 'amount', headerName: 'Amount', width: 110 }
+    { field: 'year', headerName: 'Year', width: 100 },
+    { field: 'month', headerName: 'Month', width: 100 },
+    { field: 'for', headerName: 'For', width: 150 },
+    { field: 'amount', headerName: 'Amount', width: 100 }
 ]
 
 const StudentDetails = () => {
     const [addNewForm, setAddNewForm] = useState(false);
-    const [student, setStudent] = useState({});
     const [fees, setFees] = useState([]);
     const params = useParams();
     const { addNotification } = useNotification();
@@ -46,6 +45,7 @@ const StudentDetails = () => {
                     </Typography>
                     <div style={{ height: 400, width: '100%' }}>
                         <DataGrid
+                            sx={{ textTransform: "capitalize" }}
                             rows={fees}
                             columns={columns}
                             pageSize={10}

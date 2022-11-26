@@ -96,7 +96,11 @@ export const createStudent = async (student) => {
 export const getStudents = async () => {
     const q = query(studentsCollectionRef, orderBy("studentId"))
     const data = await getDocs(q);
-    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => ({
+        ...doc,
+        doj: doc.doj ? doc.doj.toDate().toDateString() : '',
+        dob: doc.dob ? doc.dob.toDate().toDateString() : ''
+    }));
 }
 
 export const getLastStudentRecord = async () => {
@@ -150,23 +154,23 @@ export const clearCollection = async () => {
 export const dataMigration = async () => {
     // const students = await fetch('http://localhost:5000/student').then(response => response.json());
     // console.log(students)
-    // students.forEach((element, index) => {
+    // students.forEach(async (element, index) => {
     //     if (element.fees && element.fees.length) {
     //         element.fees.forEach(async (fees, j) => {
-    // await createFees({
-    //     studentId: (101 + index),
-    //     amount: fees.amount || "",
-    //     for: fees.for || "",
-    //     month: fees.month || "",
-    //     year: fees.year || ""
-    // })
-    //     })
-    // }
+    //             await createFees({
+    //                 studentId: (101 + index),
+    //                 amount: fees.amount || "",
+    //                 for: fees.for || "",
+    //                 month: fees.month || "",
+    //                 year: fees.year || ""
+    //             })
+    //         })
+    //     }
 
     // await createStudent({
     //     active: element.active || false,
-    //     dob: element.dob || "",
-    //     doj: element.doj || "",
+    //     dob: element.dob ? new Date(element.dob) : "",
+    //     doj: element.doj ? new Date(element.doj) : "",
     //     name: element.name || "",
     //     phone: element.phone || "",
     //     studentId: (101 + index),
