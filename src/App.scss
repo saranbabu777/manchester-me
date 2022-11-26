@@ -179,6 +179,23 @@ section.calendar-view {
   }
 }
 
+.payment-footer {
+  padding-top: 10px;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 20px;
+
+  .footer-cell {
+    font-size: 14px;
+    font-weight: bold;
+
+    span {
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
+}
+
 .google-btn {
   transition: background-color 0.3s, box-shadow 0.3s !important;
   padding: 12px 16px 12px 42px !important;

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { filterPayment } from '../services/api.service';
+import { filterPayment, getUserByEmail } from '../services/api.service';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
 import { InputLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 
@@ -34,24 +33,25 @@ const columns = [
 
 const PaymentDetails = (props) => {
     const [paymentDetails, setPaymentDetails] = useState([]);
+    const [userDetails, setUserDetails] = useState({});
     const [formValue, setFormValue] = useState({
         selectedYear: 0,
         selectedMonth: 0
     });
 
     useEffect(() => {
-        const getPaymentDetails = async () => {
-            const now = new Date();
-            const data = await filterPayment(props.email, monthsShort[now.getMonth()], now.getFullYear());
-            setPaymentDetails((prev) => {
-                return data;
-            });
-            setFormValue(prev => {
-                return { selectedYear: now.getFullYear(), selectedMonth: now.getMonth() };
-            })
+        const getUser = async () => {
+            const users = await getUserByEmail(props.email);
+            setUserDetails(users[0])
         }
-        getPaymentDetails();
+        getUser();
+        const now = new Date();
+        setFormValue({ selectedYear: now.getFullYear(), selectedMonth: now.getMonth() })
     }, [props.email])
+
+    useEffect(() => {
+        changePaymentDetails();
+    }, [formValue])
 
     const handleChange = (change) => {
         setFormValue(prev => {
@@ -61,10 +61,16 @@ const PaymentDetails = (props) => {
 
     const changePaymentDetails = async () => {
         const data = await filterPayment(props.email, monthsShort[formValue.selectedMonth], formValue.selectedYear);
-        setPaymentDetails((prev) => {
-            return data;
-        });
+        setPaymentDetails(data);
     }
+
+    const total = (() => {
+        return paymentDetails.reduce((sum, payment) => {
+            return sum + (Number(payment.sum))
+        }, 0);
+    })()
+
+    const balance = Number(userDetails.grossSalary) - total;
 
     return (
         <>
@@ -105,7 +111,6 @@ const PaymentDetails = (props) => {
                         }
                     </Select>
                 </FormControl>
-                <Button variant="contained" onClick={changePaymentDetails}>Get Payment Details</Button>
             </form>
             <div style={{ height: 200, width: '100%' }}>
                 <DataGrid
@@ -115,6 +120,10 @@ const PaymentDetails = (props) => {
                     rowsPerPageOptions={[10]}
                     disableSelectionOnClick
                 />
+            </div>
+            <div className='payment-footer'>
+                <div className='footer-cell'><span>Total advance received:</span> {total}</div>
+                <div className='footer-cell'><span>Balance salary:</span> {balance}</div>
             </div>
         </>
     )
