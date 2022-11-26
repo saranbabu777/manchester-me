@@ -22,10 +22,9 @@ const columns = [
         renderCell: (params) => {
             const onClick = async (e) => {
                 e.stopPropagation();
-                alert('Row will get deleted');
+                alert('Row will get deleted!');
                 await deleteFees(params.id);
             };
-
             return <Button onClick={onClick}><DeleteIcon /></Button>;
         }
     }

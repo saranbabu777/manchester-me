@@ -109,6 +109,11 @@ export const getLastStudentRecord = async () => {
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
+export const deleteStudent = async (id) => {
+    const studentDoc = doc(db, "students", id);
+    await deleteDoc(studentDoc)
+}
+
 /*Fees Collection*/
 export const createFees = async (fees) => {
     const currentUserObject = localStorage.getItem('man-client-user-inf');
