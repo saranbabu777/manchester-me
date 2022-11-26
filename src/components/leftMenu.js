@@ -3,7 +3,7 @@ import { Box, Divider, List, ListItem, ListItemButton } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Link } from "react-router-dom";
-import { Dashboard, Login, Money, Person, Add } from '@mui/icons-material';
+import { SportsSoccer, Dashboard, Login, Money, Person, Add } from '@mui/icons-material';
 import useAuthentication from '../common/hooks/useAuthentication';
 
 const LeftMenu = (props) => {
@@ -55,7 +55,7 @@ const LeftMenu = (props) => {
                                 <Link to="/academy">
                                     <ListItemButton>
                                         <ListItemIcon>
-                                            <Dashboard />
+                                            <SportsSoccer />
                                         </ListItemIcon>
                                         <ListItemText primary='Academy' />
                                     </ListItemButton>

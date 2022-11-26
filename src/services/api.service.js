@@ -1,4 +1,4 @@
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where, orderBy } from '@firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where, orderBy, limit } from '@firebase/firestore';
 import { GoogleAuthProvider, signInWithPopup, signOut } from "@firebase/auth";
 import { db, auth } from '../firebase.config';
 
@@ -94,7 +94,14 @@ export const createStudent = async (student) => {
 }
 
 export const getStudents = async () => {
-    const data = await getDocs(studentsCollectionRef);
+    const q = query(studentsCollectionRef, orderBy("studentId"))
+    const data = await getDocs(q);
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+}
+
+export const getLastStudentRecord = async () => {
+    const q = query(studentsCollectionRef, orderBy("studentId", "desc"), limit(1))
+    const data = await getDocs(q);
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
