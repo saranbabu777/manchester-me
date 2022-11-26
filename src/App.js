@@ -15,6 +15,8 @@ import Notification from './components/notification';
 import AuthProvider from './common/providers/authProvider';
 import Dashboard from './components/dashboard';
 import PrivateRoute from './components/privateRoute';
+import Academy from './components/academy';
+import StudentDetails from './components/studentDetails';
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
               <Routes>
                 <Route exact path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/academy" element={<PrivateRoute><Academy /></PrivateRoute>} />
+                <Route path="/student/:studentId" element={<PrivateRoute><StudentDetails /></PrivateRoute>} />
                 <Route path="/add-user" element={<PrivateRoute role='admin'><AddUser /></PrivateRoute>} />
                 <Route path="/user-details/:email" element={<PrivateRoute role='admin'><UserDetails /></PrivateRoute>} />
                 <Route path="/add-payment" element={<PrivateRoute><AddPayment /></PrivateRoute>} />

@@ -1,10 +1,12 @@
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where } from '@firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where, orderBy } from '@firebase/firestore';
 import { GoogleAuthProvider, signInWithPopup, signOut } from "@firebase/auth";
 import { db, auth } from '../firebase.config';
 
 const usersCollectionRef = collection(db, "users");
 const paymentCollectionRef = collection(db, "payment");
 const attendanceCollectionRef = collection(db, "attendance");
+const studentsCollectionRef = collection(db, "students");
+const feesCollectionRef = collection(db, "fees");
 
 /*Attendance Collection*/
 export const createAttendance = async (attendance) => {
@@ -82,6 +84,35 @@ export const getUsers = async () => {
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
+/*Students Collection*/
+export const createStudent = async (student) => {
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
+    const lastUpdatedOn = new Date();
+    await addDoc(studentsCollectionRef, { ...student, lastUpdatedBy, lastUpdatedOn })
+}
+
+export const getStudents = async () => {
+    const data = await getDocs(studentsCollectionRef);
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+}
+
+/*Students Collection*/
+export const createFees = async (fees) => {
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
+    const lastUpdatedOn = new Date();
+    await addDoc(feesCollectionRef, { ...fees, lastUpdatedBy, lastUpdatedOn })
+}
+
+export const getFeesByStudentId = async (studentId) => {
+    const q = query(feesCollectionRef, where("studentId", "==", studentId), orderBy("year"))
+    const data = await getDocs(q);
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+}
+
 const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = async () => {
@@ -96,6 +127,7 @@ export const logOut = async () => {
     await signOut(auth)
 }
 
+/*Method to cleanup firestore collection*/
 export const clearCollection = async () => {
     //Uncomment whenever data cleanup required
     // const collectionRef = attendanceCollectionRef;
@@ -104,5 +136,33 @@ export const clearCollection = async () => {
     // data.forEach(async (item) => {
     //     const document = doc(db, collectionName, item.id);
     //     await deleteDoc(document)
+    // });
+}
+
+/*Method to migrate data from mongo db to firestore*/
+export const dataMigration = async () => {
+    // const students = await fetch('http://localhost:5000/student').then(response => response.json());
+    // console.log(students)
+    // students.forEach((element, index) => {
+    //     if (element.fees && element.fees.length) {
+    //         element.fees.forEach(async (fees, j) => {
+    // await createFees({
+    //     studentId: (101 + index),
+    //     amount: fees.amount || "",
+    //     for: fees.for || "",
+    //     month: fees.month || "",
+    //     year: fees.year || ""
+    // })
+    //     })
+    // }
+
+    // await createStudent({
+    //     active: element.active || false,
+    //     dob: element.dob || "",
+    //     doj: element.doj || "",
+    //     name: element.name || "",
+    //     phone: element.phone || "",
+    //     studentId: (101 + index),
+    // })
     // });
 }

@@ -50,6 +50,19 @@ const LeftMenu = (props) => {
                             </ListItem>
                         </List>
                         <Divider />
+                        <List>
+                            <ListItem key='Academy' disablePadding>
+                                <Link to="/academy">
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <Dashboard />
+                                        </ListItemIcon>
+                                        <ListItemText primary='Academy' />
+                                    </ListItemButton>
+                                </Link>
+                            </ListItem>
+                        </List>
+                        <Divider />
                     </>
                 }
                 {
