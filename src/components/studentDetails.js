@@ -2,7 +2,9 @@ import { Button, Card, CardActions, CardContent, Typography } from '@mui/materia
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getFeesByStudentId } from '../services/api.service';
+import useNotification from '../common/hooks/useNotification';
+import { createFees, getFeesByStudentId } from '../services/api.service';
+import AddFeesForm from './addFeesForm';
 
 const columns = [
     { field: 'year', headerName: 'Year', width: 150 },
@@ -12,19 +14,28 @@ const columns = [
 ]
 
 const StudentDetails = () => {
+    const [addNewForm, setAddNewForm] = useState(false);
     const [student, setStudent] = useState({});
     const [fees, setFees] = useState([]);
     const params = useParams();
+    const { addNotification } = useNotification();
 
     useEffect(() => {
-        const studentId = Number(params.studentId);
-        const getFees = async () => {
-            const response = await getFeesByStudentId(studentId);
-            console.log(response)
-            setFees(response);
-        }
         getFees();
     }, [])
+
+    const getFees = async () => {
+        const studentId = Number(params.studentId);
+        const response = await getFeesByStudentId(studentId);
+        setFees(response);
+    }
+
+    const saveFees = async (fees) => {
+        await createFees({ ...fees, studentId: Number(params.studentId) });
+        getFees();
+        addNotification('Fees saved successfully', 'success');
+        setAddNewForm(false);
+    }
 
     return (
         <>
@@ -33,7 +44,7 @@ const StudentDetails = () => {
                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                         Details of {params.studentId}
                     </Typography>
-                    <div style={{ height: 600, width: '100%' }}>
+                    <div style={{ height: 400, width: '100%' }}>
                         <DataGrid
                             rows={fees}
                             columns={columns}
@@ -42,9 +53,19 @@ const StudentDetails = () => {
                             disableSelectionOnClick
                         />
                     </div>
+                    {addNewForm &&
+                        <>
+                            <Typography sx={{ fontSize: 14, paddingTop: '10px', fontWeight: 'bold' }} color="text.secondary" gutterBottom>
+                                Add fees
+                            </Typography>
+                            <AddFeesForm saveFees={saveFees} />
+                        </>
+                    }
                 </CardContent>
                 <CardActions>
-                    <Button variant="contained" onClick={() => { }}>Add Fees</Button>
+                    {!addNewForm &&
+                        <Button variant="contained" onClick={() => { setAddNewForm(true); }}>Add Fees</Button>
+                    }
                 </CardActions>
             </Card>
         </>

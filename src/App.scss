@@ -196,7 +196,8 @@ section.calendar-view {
   }
 }
 
-.add-student-form {
+.add-student-form,
+.add-fees-form {
   display: flex;
   flex-direction: column;
   gap: 20px;

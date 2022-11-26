@@ -25,6 +25,7 @@ const AddStudentForm = (props) => {
             phone: "",
             dob: "",
             doj: "",
+            active: true
         }, validator
     })
 
