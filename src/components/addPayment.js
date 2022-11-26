@@ -40,13 +40,11 @@ const AddPayment = () => {
         if (auth?.role === permission.STAFF) {
             const currentUserObject = localStorage.getItem('man-client-user-inf');
             const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
-            handleChange({ target: { name: 'email', value: email || "" } })
+            handleStateChange({ name: 'email', value: email || "" })
         } else {
             const loadUserData = async () => {
                 const data = await getUsers();
-                setUsers((prev) => {
-                    return data.map(e => ({ id: e.email, label: e.name }));
-                });
+                setUsers(data.map(e => ({ id: e.email, label: e.name })));
             }
             loadUserData();
         }
@@ -77,7 +75,7 @@ const AddPayment = () => {
         }
     }
 
-    const { handleChange, handleBlur, state, errors } = useForm({
+    const { handleStateChange, handleChange, handleBlur, state, errors } = useForm({
         initState: {
             email: "",
             date: new Date(),
@@ -110,7 +108,7 @@ const AddPayment = () => {
                                         name="email"
                                         required
                                         value={state.email}
-                                        onChange={(e, newValue) => { handleChange({ target: { name: 'email', value: newValue && newValue.id } }) }}
+                                        onChange={(e, newValue) => { handleStateChange({ name: 'email', value: newValue && newValue.id }) }}
                                         onBlur={(e) => { handleBlur({ target: { name: 'email' } }) }}
                                         error={errors.email}
                                         options={users}
@@ -128,7 +126,7 @@ const AddPayment = () => {
                                     name="date"
                                     required
                                     value={state.date}
-                                    onChange={(e) => { handleChange({ target: { name: 'date', value: e } }) }}
+                                    onChange={(e) => { handleStateChange({ name: 'date', value: e }) }}
                                     onBlur={(e) => { handleBlur({ target: { name: 'date' } }) }}
                                     renderInput={(params) => <TextField name="date" {...params} />}
                                 />

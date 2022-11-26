@@ -43,7 +43,7 @@ const AddUser = () => {
         }
     }
 
-    const { handleChange, handleBlur, state, errors } = useForm({
+    const { handleStateChange, handleChange, handleBlur, state, errors } = useForm({
         initState: {
             name: "",
             email: "",
@@ -114,7 +114,7 @@ const AddUser = () => {
                                     name="doj"
                                     required
                                     value={state.doj}
-                                    onChange={(e) => { handleChange({ target: { name: 'doj', value: e } }) }}
+                                    onChange={(e) => { handleStateChange({ name: 'doj', value: e }) }}
                                     onBlur={(e) => { handleBlur({ target: { name: 'doj' } }) }}
                                     renderInput={(params) => <TextField name="doj" {...params} />}
                                 />

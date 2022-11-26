@@ -4,11 +4,14 @@ const useForm = ({ initState, validator, callback }) => {
     const [state, setState] = useState(initState);
     const [errors, setErrors] = useState({});
 
-    const handleChange = (event) => {
-        const { name, value } = event.target;
+    const handleStateChange = ({ name, value }) => {
         setState((prev) => {
             return { ...prev, [name]: value }
         })
+    }
+
+    const handleChange = (event) => {
+        handleStateChange(event.target)
     }
 
     const handleBlur = (event) => {
@@ -19,7 +22,7 @@ const useForm = ({ initState, validator, callback }) => {
         })
     }
 
-    return { handleChange, handleBlur, errors, state };
+    return { handleStateChange, handleChange, handleBlur, errors, state };
 }
 
 export default useForm;
