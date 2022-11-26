@@ -109,7 +109,7 @@ export const getLastStudentRecord = async () => {
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
-/*Students Collection*/
+/*Fees Collection*/
 export const createFees = async (fees) => {
     const currentUserObject = localStorage.getItem('man-client-user-inf');
     const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
@@ -121,7 +121,15 @@ export const createFees = async (fees) => {
 export const getFeesByStudentId = async (studentId) => {
     const q = query(feesCollectionRef, where("studentId", "==", studentId), orderBy("year"))
     const data = await getDocs(q);
-    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => ({
+        ...doc,
+        date: doc.date ? doc.date.toDate().toDateString() : ''
+    }));
+}
+
+export const deleteFees = async (id) => {
+    const feesDoc = doc(db, "fees", id);
+    await deleteDoc(feesDoc)
 }
 
 const provider = new GoogleAuthProvider();

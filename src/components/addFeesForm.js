@@ -55,7 +55,7 @@ const AddFeesForm = (props) => {
                 <form className='add-fees-form'>
                     <FormControl>
                         <DesktopDatePicker
-                            label="Date"
+                            label="Date Of Payment"
                             inputFormat="dd/MM/yyyy"
                             value={state.date}
                             onChange={(value) => handleStateChange({ name: 'date', value })}
@@ -82,7 +82,7 @@ const AddFeesForm = (props) => {
                             disablePortal
                             onChange={(event, newValue) => handleStateChange({ name: 'month', value: newValue ? newValue.value : '' })}
                             options={monthList}
-                            renderInput={(params) => <TextField {...params} label="Month" />}
+                            renderInput={(params) => <TextField {...params} label="Fee Towards Month" />}
                         />
                     </FormControl>
                     <FormControl>
@@ -90,7 +90,7 @@ const AddFeesForm = (props) => {
                             disablePortal
                             onChange={(event, value) => handleStateChange({ name: 'year', value })}
                             options={yearList}
-                            renderInput={(params) => <TextField {...params} label="Year" />}
+                            renderInput={(params) => <TextField {...params} label="Fee Towards Year" />}
                         />
                     </FormControl>
                 </form>

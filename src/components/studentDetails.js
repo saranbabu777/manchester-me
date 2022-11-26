@@ -2,15 +2,33 @@ import { Button, Card, CardActions, CardContent, Typography } from '@mui/materia
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import useAuthentication from '../common/hooks/useAuthentication';
 import useNotification from '../common/hooks/useNotification';
-import { createFees, getFeesByStudentId } from '../services/api.service';
+import { createFees, getFeesByStudentId, deleteFees } from '../services/api.service';
 import AddFeesForm from './addFeesForm';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const columns = [
     { field: 'year', headerName: 'Year', width: 100 },
     { field: 'month', headerName: 'Month', width: 100 },
     { field: 'for', headerName: 'For', width: 150 },
-    { field: 'amount', headerName: 'Amount', width: 100 }
+    { field: 'amount', headerName: 'Amount', width: 100 },
+    { field: 'date', headerName: 'Date Of Payment', width: 150 },
+    { field: 'lastUpdatedBy', headerName: 'Last Updated By', width: 250 },
+    {
+        field: "action",
+        headerName: "Action",
+        sortable: false,
+        renderCell: (params) => {
+            const onClick = async (e) => {
+                e.stopPropagation();
+                alert('Row will get deleted');
+                await deleteFees(params.id);
+            };
+
+            return <Button onClick={onClick}><DeleteIcon /></Button>;
+        }
+    }
 ]
 
 const StudentDetails = () => {
@@ -18,9 +36,15 @@ const StudentDetails = () => {
     const [fees, setFees] = useState([]);
     const params = useParams();
     const { addNotification } = useNotification();
+    const [columnVisibilityModel, setColumnVisibilityModel] = useState({ action: false });
+    const { auth, permission } = useAuthentication();
 
     useEffect(() => {
         getFees();
+        /*Enable delete button for Admin*/
+        if (auth?.role === permission.ADMIN) {
+            setColumnVisibilityModel(({ action: true }));
+        }
     }, [])
 
     const getFees = async () => {
@@ -51,6 +75,10 @@ const StudentDetails = () => {
                             pageSize={10}
                             rowsPerPageOptions={[10]}
                             disableSelectionOnClick
+                            columnVisibilityModel={columnVisibilityModel}
+                            onColumnVisibilityModelChange={(newModel) =>
+                                setColumnVisibilityModel(newModel)
+                            }
                         />
                     </div>
                     {addNewForm &&
