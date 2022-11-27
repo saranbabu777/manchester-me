@@ -36,15 +36,7 @@ export const createPayment = async (payment) => {
 export const filterPayment = async (email, month, year) => {
     const q = query(paymentCollectionRef, where("email", "==", email), where("forMonth", "==", month), where("forYear", "==", year))
     const data = await getDocs(q);
-    const parsedPayment = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => (
-        {
-            ...doc,
-            date: doc.date.toDate(),
-            lastUpdatedOn: doc.lastUpdatedOn ? doc.lastUpdatedOn.toDate() : '',
-            displayDate: doc.date.toDate().toDateString(),
-            displayLastUpdatedOn: doc.lastUpdatedOn ? doc.lastUpdatedOn.toDate().toDateString() : ''
-        }
-    ));
+    const parsedPayment = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     return parsedPayment;
 }
 
@@ -96,11 +88,13 @@ export const createStudent = async (student) => {
 export const getStudents = async () => {
     const q = query(studentsCollectionRef, orderBy("studentId"))
     const data = await getDocs(q);
-    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => ({
-        ...doc,
-        doj: doc.doj ? doc.doj.toDate().toDateString() : '',
-        dob: doc.dob ? doc.dob.toDate().toDateString() : ''
-    }));
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+}
+
+export const getStudentByStudentId = async (studentId) => {
+    const q = query(studentsCollectionRef, where("studentId", "==", studentId))
+    const data = await getDocs(q);
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
 export const getLastStudentRecord = async () => {
@@ -126,10 +120,7 @@ export const createFees = async (fees) => {
 export const getFeesByStudentId = async (studentId) => {
     const q = query(feesCollectionRef, where("studentId", "==", studentId), orderBy("year"))
     const data = await getDocs(q);
-    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => ({
-        ...doc,
-        date: doc.date ? doc.date.toDate().toDateString() : ''
-    }));
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
 export const deleteFees = async (id) => {

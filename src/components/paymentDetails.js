@@ -23,12 +23,26 @@ const monthList = [
 ]
 const monthsShort = [`jan`, `feb`, `mar`, `apr`, `may`, `jun`, `jul`, `aug`, `sep`, `oct`, `nov`, `dec`]
 const columns = [
-    { field: 'displayDate', headerName: 'Date', width: 150 },
+    {
+        field: "date",
+        headerName: "Date",
+        width: 150,
+        renderCell: (params) => {
+            return params.value ? params.value.toDate().toDateString() : '';
+        }
+    },
     { field: 'type', headerName: 'Type' },
     { field: 'sum', headerName: 'Sum' },
     { field: 'mode', headerName: 'Mode' },
     { field: 'lastUpdatedBy', headerName: 'Last Updated User', width: 250 },
-    { field: 'displayLastUpdatedOn', headerName: 'Last Updated Date', width: 150 }
+    {
+        field: "lastUpdatedOn",
+        headerName: "Last Updated Date",
+        width: 150,
+        renderCell: (params) => {
+            return params.value ? params.value.toDate().toDateString() : '';
+        }
+    }
 ]
 
 const PaymentDetails = (props) => {
@@ -112,8 +126,9 @@ const PaymentDetails = (props) => {
                     </Select>
                 </FormControl>
             </form>
-            <div style={{ height: 200, width: '100%' }}>
+            <div style={{ height: 300, width: '100%' }}>
                 <DataGrid
+                    sx={{ textTransform: 'capitalize' }}
                     rows={paymentDetails}
                     columns={columns}
                     pageSize={10}

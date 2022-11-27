@@ -12,7 +12,14 @@ const columns = [
     { field: 'studentId', headerName: 'Reg. No', width: 100 },
     { field: 'name', headerName: 'Name', width: 250 },
     { field: 'phone', headerName: 'Phone', width: 150 },
-    { field: 'doj', headerName: 'Date of Joining', width: 150 },
+    {
+        field: "doj",
+        headerName: "Date of Joining",
+        width: 150,
+        renderCell: (params) => {
+            return params.value ? params.value.toDate().toDateString() : '';
+        }
+    },
     { field: 'active', headerName: 'Active', width: 100 },
     {
         field: "action",
