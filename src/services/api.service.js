@@ -85,6 +85,15 @@ export const createStudent = async (student) => {
     await addDoc(studentsCollectionRef, { ...student, lastUpdatedBy, lastUpdatedOn })
 }
 
+export const updateStudent = async (id, student) => {
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
+    const lastUpdatedOn = new Date();
+    const studentDoc = doc(db, "students", id);
+    await updateDoc(studentDoc, { ...student, lastUpdatedBy, lastUpdatedOn })
+}
+
 export const getStudents = async () => {
     const q = query(studentsCollectionRef, orderBy("studentId"))
     const data = await getDocs(q);

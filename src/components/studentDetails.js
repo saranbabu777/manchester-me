@@ -4,9 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAuthentication from '../common/hooks/useAuthentication';
 import useNotification from '../common/hooks/useNotification';
-import { createFees, getFeesByStudentId, deleteFees, getStudentByStudentId } from '../services/api.service';
+import { createFees, getFeesByStudentId, deleteFees, getStudentByStudentId, updateStudent } from '../services/api.service';
 import AddFeesForm from './addFeesForm';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import AddStudentForm from './addStudentForm';
 
 const monthShortNames = [`jan`, `feb`, `mar`, `apr`, `may`, `jun`,
     `jul`, `aug`, `sep`, `oct`, `nov`, `dec`];
@@ -48,17 +50,13 @@ const StudentDetails = () => {
     const [addNewForm, setAddNewForm] = useState(false);
     const [fees, setFees] = useState([]);
     const [student, setStudent] = useState({});
+    const [editStudentForm, setEditStudentForm] = useState(false);
     const params = useParams();
     const { addNotification } = useNotification();
     const [columnVisibilityModel, setColumnVisibilityModel] = useState({ action: false });
     const { auth, permission } = useAuthentication();
 
     useEffect(() => {
-        const getStudentDetails = async () => {
-            const studentDetails = await getStudentByStudentId(Number(params.studentId));
-            if (studentDetails.length)
-                setStudent(studentDetails[0]);
-        }
         getStudentDetails();
         getFees();
         /*Enable delete button for Admin*/
@@ -66,6 +64,12 @@ const StudentDetails = () => {
             setColumnVisibilityModel(({ action: true }));
         }
     }, [])
+
+    const getStudentDetails = async () => {
+        const studentDetails = await getStudentByStudentId(Number(params.studentId));
+        if (studentDetails.length)
+            setStudent(studentDetails[0]);
+    }
 
     const getFees = async () => {
         const studentId = Number(params.studentId);
@@ -80,13 +84,29 @@ const StudentDetails = () => {
         setAddNewForm(false);
     }
 
+    const toggleEditForm = () => {
+        setEditStudentForm(editForm => !editForm);
+    }
+
+    const saveStudent = async (event) => {
+        await updateStudent(student.id, event);
+        getStudentDetails();/*update student state*/
+        addNotification('Student saved successfully', 'success');
+        setEditStudentForm(false);
+    }
+
     return (
         <>
             <Card sx={{ minWidth: 275 }}>
                 <CardContent>
                     <Typography sx={{ fontSize: 14, textTransform: "capitalize", fontWeight: "bold" }} color="text.secondary" gutterBottom>
-                        {student.name}
+                        {student.name} <Button onClick={toggleEditForm}><EditIcon /></Button>
                     </Typography>
+                    {editStudentForm &&
+                        <div style={{ paddingBottom: '10px' }}>
+                            <AddStudentForm saveStudent={saveStudent} editMode={true} student={student} />
+                        </div>
+                    }
                     <div style={{ height: 400, width: '100%' }}>
                         <DataGrid
                             sx={{ textTransform: "capitalize" }}

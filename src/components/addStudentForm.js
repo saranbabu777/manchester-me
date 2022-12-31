@@ -1,4 +1,4 @@
-import { Button, FormControl, TextField } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React from 'react';
@@ -21,11 +21,11 @@ const AddStudentForm = (props) => {
 
     const { handleStateChange, handleChange, handleBlur, state, errors } = useForm({
         initState: {
-            name: "",
-            phone: "",
-            dob: "",
-            doj: "",
-            active: true
+            name: props.student ? props.student.name : "",
+            phone: props.student ? props.student.phone : "",
+            dob: props.student ? props.student.dob.toDate() : "",
+            doj: props.student ? props.student.doj.toDate() : "",
+            active: props.student ? props.student.active : true
         }, validator
     })
 
@@ -57,6 +57,23 @@ const AddStudentForm = (props) => {
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </FormControl>
+                    {props.editMode &&
+                        <FormControl className='form-field' sx={{ minWidth: 120 }}>
+                            <InputLabel id="active-label">Status</InputLabel>
+                            <Select
+                                labelId="active-label"
+                                id="active"
+                                label="Active"
+                                name="active"
+                                value={state.active}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                            >
+                                <MenuItem value={true}>Active</MenuItem>
+                                <MenuItem value={false}>Inactive</MenuItem>
+                            </Select>
+                        </FormControl>
+                    }
                 </form>
                 <Button variant="contained" onClick={() => { props.saveStudent(state) }}>Save</Button>
             </LocalizationProvider>
