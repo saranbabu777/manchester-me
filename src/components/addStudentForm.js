@@ -23,8 +23,8 @@ const AddStudentForm = (props) => {
         initState: {
             name: props.student ? props.student.name : "",
             phone: props.student ? props.student.phone : "",
-            dob: props.student ? props.student.dob.toDate() : "",
-            doj: props.student ? props.student.doj.toDate() : "",
+            dob: props.student && props.student.dob ? props.student.dob.toDate() : "",
+            doj: props.student && props.student.doj ? props.student.doj.toDate() : "",
             active: props.student ? props.student.active : true
         }, validator
     })
