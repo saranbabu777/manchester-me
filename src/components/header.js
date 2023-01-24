@@ -35,11 +35,16 @@ const Header = () => {
         const { displayName, email, profilePic } = currentUser;
         const users = await getUserByEmail(email);
         if (users.length > 0) {
-            const { role } = users[0];
-            localStorage.setItem('man-client-user-inf', JSON.stringify({ displayName, email, profilePic }));
-            addAuth(email, role);
-            navigate(`/`);
-            setAuthLoading(false);
+            const { role, active } = users[0];
+            if (active) {
+                localStorage.setItem('man-client-user-inf', JSON.stringify({ displayName, email, profilePic }));
+                addAuth(email, role);
+                navigate(`/`);
+                setAuthLoading(false);
+            } else {
+                addNotification('Unauthorized user!', 'error');
+                setAuthLoading(false);
+            }
         } else {
             addNotification('User does not exist!', 'error');
             setAuthLoading(false);

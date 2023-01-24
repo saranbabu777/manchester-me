@@ -25,10 +25,14 @@ const Login = () => {
     const login = async () => {
         const users = await getUserByEmail(loginForm.email);
         if (users.length > 0) {
-            const { email, role } = users[0];
-            localStorage.setItem('man-client-user-inf', JSON.stringify({ email }));
-            addAuth(email, role);
-            navigate(`/`);
+            const { email, role, active } = users[0];
+            if (active) {
+                localStorage.setItem('man-client-user-inf', JSON.stringify({ email }));
+                addAuth(email, role);
+                navigate(`/`);
+            } else {
+                addNotification('Unauthorized user!', 'error');
+            }
         } else {
             addNotification('User does not exist!', 'error');
         }

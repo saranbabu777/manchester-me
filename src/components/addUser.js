@@ -51,6 +51,7 @@ const AddUser = () => {
             phone: "",
             doj: "",
             grossSalary: 0,
+            active: true
         }, validator
     })
 
