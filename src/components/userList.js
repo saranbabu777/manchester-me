@@ -49,7 +49,7 @@ const UserList = () => {
             </FormControl>
             {
                 searchUsers().map((user, key) => {
-                    return <div className='user-block' key={"user" + key} onClick={() => { viewUser(user.email); }}>
+                    return <div className={(user.active ? '' : 'inactive ') + 'user-block'} key={"user" + key} onClick={() => { viewUser(user.email); }}>
                         <p>{user.name} ({user.role})</p>
                         <DeleteIcon onClick={(e) => { removeUser(e, user.id); }} />
                     </div>
