@@ -40,6 +40,16 @@ export const filterPayment = async (email, month, year) => {
     return parsedPayment;
 }
 
+export const updatePayment = async (id, payment) => {
+    const paymentDoc = doc(db, "payment", id);
+    await updateDoc(paymentDoc, { ...payment })
+}
+
+export const deletePayment = async (id) => {
+    const paymentDoc = doc(db, "payment", id);
+    await deleteDoc(paymentDoc)
+}
+
 /*Users Collection*/
 export const createUser = async (user) => {
     const currentUserObject = localStorage.getItem('man-client-user-inf');

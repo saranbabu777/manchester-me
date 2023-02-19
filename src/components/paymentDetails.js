@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { filterPayment, getUserByEmail } from '../services/api.service';
+import { filterPayment, getUserByEmail, deletePayment } from '../services/api.service';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { InputLabel } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Button } from '@mui/material';
+import useAuthentication from '../common/hooks/useAuthentication';
 
 const yearList = [2022, 2023]
 const monthList = [
@@ -42,6 +45,19 @@ const columns = [
         renderCell: (params) => {
             return params.value ? params.value.toDate().toDateString() : '';
         }
+    },
+    {
+        field: "action",
+        headerName: "Action",
+        sortable: false,
+        renderCell: (params) => {
+            const onClick = async (e) => {
+                e.stopPropagation();
+                alert('Row will get deleted!');
+                await deletePayment(params.id);
+            };
+            return <Button onClick={onClick}><DeleteIcon /></Button>;
+        }
     }
 ]
 
@@ -52,6 +68,8 @@ const PaymentDetails = (props) => {
         selectedYear: 0,
         selectedMonth: 0
     });
+    const [columnVisibilityModel, setColumnVisibilityModel] = useState({ action: false });
+    const { auth, permission } = useAuthentication();
 
     useEffect(() => {
         const getUser = async () => {
@@ -61,6 +79,10 @@ const PaymentDetails = (props) => {
         getUser();
         const now = new Date();
         setFormValue({ selectedYear: now.getFullYear(), selectedMonth: now.getMonth() })
+        /*Enable delete button for Admin*/
+        if (auth?.role === permission.ADMIN) {
+            setColumnVisibilityModel(({ action: true }));
+        }
     }, [props.email])
 
     useEffect(() => {
@@ -134,6 +156,10 @@ const PaymentDetails = (props) => {
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     disableSelectionOnClick
+                    columnVisibilityModel={columnVisibilityModel}
+                    onColumnVisibilityModelChange={(newModel) =>
+                        setColumnVisibilityModel(newModel)
+                    }
                 />
             </div>
             <div className='payment-footer'>
