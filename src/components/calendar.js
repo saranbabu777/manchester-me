@@ -79,6 +79,8 @@ const Calendar = (props) => {
 
     const absent = attendance.filter(x => x.status === 'OUT').map(x => x.date.getDate());
 
+    const half = attendance.filter(x => x.status === 'HALF').map(x => x.date.getDate());
+
     return (
         <>
             <section className='grid calendar-view'>
@@ -119,6 +121,7 @@ const Calendar = (props) => {
                                         return (
                                             <div className={
                                                 `col ` + (day ? ((present.includes(day.getDate()) ? `yes ` : ``) +
+                                                    (half.includes(day.getDate()) ? `half ` : ``) +
                                                     (absent.includes(day.getDate()) ? `no ` : ``)) : ` disable`)}
                                                 key={"day" + dayKey + "week" + key}>
                                                 {day ? day.getDate() : null}

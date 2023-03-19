@@ -27,7 +27,8 @@ const ManageLeave = () => {
                     <Calendar email={email} />
                 </CardContent>
                 <CardActions>
-                    <Button variant="contained" onClick={() => { navigateToAttendance('OUT'); }}>Apply Leave</Button>
+                    <Button variant="contained" onClick={() => { navigateToAttendance('OUT'); }}>Apply Full Day Leave</Button>
+                    <Button variant="contained" onClick={() => { navigateToAttendance('HALF'); }}>Apply Half Day Leave</Button>
                     <Button variant="contained" onClick={() => { navigateToAttendance('IN'); }}>Mark Attendance</Button>
                 </CardActions>
             </Card>

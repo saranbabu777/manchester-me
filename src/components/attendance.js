@@ -102,7 +102,8 @@ const Attendance = () => {
                                     onChange={(e) => { handleChange({ status: e.target.value }); }}
                                 >
                                     <MenuItem value='IN'>Mark as present</MenuItem>
-                                    <MenuItem value='OUT'>Apply Leave</MenuItem>
+                                    <MenuItem value='OUT'>Apply Full Day Leave</MenuItem>
+                                    <MenuItem value='HALF'>Apply Half Day Leave</MenuItem>
                                 </Select>
                             </FormControl>
                         </div>
