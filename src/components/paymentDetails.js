@@ -3,7 +3,7 @@ import { filterPayment, getUserByEmail, deletePayment } from '../services/api.se
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { InputLabel } from '@mui/material';
+import { InputLabel, TextField } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from '@mui/material';
@@ -68,6 +68,7 @@ const PaymentDetails = (props) => {
         selectedYear: 0,
         selectedMonth: 0
     });
+    const [lopDays, setLopDays] = useState('')
     const [columnVisibilityModel, setColumnVisibilityModel] = useState({ action: false });
     const { auth, permission } = useAuthentication();
 
@@ -100,13 +101,21 @@ const PaymentDetails = (props) => {
         setPaymentDetails(data);
     }
 
+    const handleLopChange = (e) => {
+        const onlyNumbers = /^\d*\.?\d*$/;
+        if (onlyNumbers.test(e.target.value)) {
+            setLopDays(e.target.value)
+        }
+    }
+
     const total = (() => {
         return paymentDetails.reduce((sum, payment) => {
             return sum + (Number(payment.sum))
         }, 0);
     })()
 
-    const balance = Number(userDetails.grossSalary) - total;
+    const balance = ((Number(userDetails?.grossSalary) - total) -
+        Math.floor(lopDays * Math.floor(Number(userDetails?.grossSalary) / 30)));
 
     return (
         <>
@@ -165,6 +174,15 @@ const PaymentDetails = (props) => {
             <div className='payment-footer'>
                 <div className='footer-cell'><span>Total advance received:</span> {total}</div>
                 <div className='footer-cell'><span>Balance salary:</span> {balance}</div>
+                <div>
+                    <FormControl className='form-field'>
+                        <TextField label="Number of days leave" variant="outlined"
+                            name="lop"
+                            value={lopDays}
+                            onChange={handleLopChange}
+                        />
+                    </FormControl>
+                </div>
             </div>
         </>
     )

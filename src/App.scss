@@ -193,6 +193,7 @@ section.calendar-view {
   display: inline-flex;
   flex-wrap: wrap;
   gap: 20px;
+  align-items: center;
 
   .footer-cell {
     font-size: 14px;
