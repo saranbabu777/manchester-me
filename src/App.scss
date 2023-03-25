@@ -230,3 +230,16 @@ section.calendar-view {
   background-repeat: no-repeat !important;
   background-position: 12px 11px !important;
 }
+
+.pending-fees {
+  font-size: 13px;
+
+  .item {
+    text-transform: capitalize;
+    padding: 5px;
+    border: 1px solid #d03e3e;
+    margin: 5px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+}

@@ -9,6 +9,7 @@ import AddFeesForm from './addFeesForm';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddStudentForm from './addStudentForm';
+import PendingFees from './pendingFees';
 
 const monthShortNames = [`jan`, `feb`, `mar`, `apr`, `may`, `jun`,
     `jul`, `aug`, `sep`, `oct`, `nov`, `dec`];
@@ -74,6 +75,9 @@ const StudentDetails = () => {
     const getFees = async () => {
         const studentId = Number(params.studentId);
         const response = await getFeesByStudentId(studentId);
+        response.sort((a, b) => {
+            return Number(b.year) - Number(a.year) || monthShortNames.indexOf(a.month) - monthShortNames.indexOf(b.month);
+        })
         setFees(response);
     }
 
@@ -107,13 +111,17 @@ const StudentDetails = () => {
                             <AddStudentForm saveStudent={saveStudent} editMode={true} student={student} />
                         </div>
                     }
+                    <Typography sx={{ fontSize: 14, paddingTop: '10px', fontWeight: 'bold' }} color="text.secondary" gutterBottom>
+                        Fees Pending
+                    </Typography>
+                    <PendingFees fees={fees} />
                     <div style={{ height: 400, width: '100%' }}>
                         <DataGrid
                             sx={{ textTransform: "capitalize" }}
                             rows={fees}
                             columns={columns}
-                            pageSize={10}
-                            rowsPerPageOptions={[10]}
+                            pageSize={20}
+                            rowsPerPageOptions={[20]}
                             disableSelectionOnClick
                             columnVisibilityModel={columnVisibilityModel}
                             onColumnVisibilityModelChange={(newModel) =>

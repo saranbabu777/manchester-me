@@ -7,6 +7,25 @@ import useNotification from '../common/hooks/useNotification';
 import { createStudent, deleteStudent, getLastStudentRecord, getStudents } from '../services/api.service';
 import AddStudentForm from './addStudentForm';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { darken, lighten, styled } from '@mui/material/styles';
+
+const getBackgroundColor = (color, mode) =>
+    mode === 'dark' ? darken(color, 0.7) : lighten(color, 0.7);
+
+const getHoverBackgroundColor = (color, mode) =>
+    mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
+
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+    '& .students-grid-theme--Inactive': {
+        backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+        '&:hover': {
+            backgroundColor: getHoverBackgroundColor(
+                theme.palette.error.main,
+                theme.palette.mode,
+            ),
+        }
+    }
+}));
 
 const columns = [
     { field: 'studentId', headerName: 'Reg. No', width: 100 },
@@ -82,7 +101,13 @@ const Academy = () => {
                         Academy Students
                     </Typography>
                     <div style={{ height: 600, width: '100%' }}>
-                        <DataGrid
+                        <StyledDataGrid
+                            initialState={{
+                                sorting: {
+                                    sortModel: [{ field: 'active', sort: 'asc' }],
+                                },
+                            }}
+                            getRowClassName={(params) => `students-grid-theme--${params.row.active}`}
                             sx={{ textTransform: 'capitalize' }}
                             rows={students}
                             columns={columns}
