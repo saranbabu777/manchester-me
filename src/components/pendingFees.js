@@ -38,9 +38,9 @@ const PendingFees = (props) => {
     return (
         <div className='pending-fees'>
             {pendingList.length ?
-                pendingList.map(x => (
-                    <div className='item'>
-                        {x.year} {x.month}
+                pendingList.map((pending, key) => (
+                    <div className='item' key={'pending' + key}>
+                        {pending.year} {pending.month}
                     </div>
                 )) :
                 <div>No records found</div>

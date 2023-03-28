@@ -1,4 +1,4 @@
-import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where, orderBy, limit } from '@firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where, orderBy, limit, Timestamp } from '@firebase/firestore';
 import { GoogleAuthProvider, signInWithPopup, signOut } from "@firebase/auth";
 import { db, auth } from '../firebase.config';
 
@@ -7,6 +7,7 @@ const paymentCollectionRef = collection(db, "payment");
 const attendanceCollectionRef = collection(db, "attendance");
 const studentsCollectionRef = collection(db, "students");
 const feesCollectionRef = collection(db, "fees");
+const transactionCollectionRef = collection(db, "transaction");
 
 /*Attendance Collection*/
 export const createAttendance = async (attendance) => {
@@ -145,6 +146,42 @@ export const getFeesByStudentId = async (studentId) => {
 export const deleteFees = async (id) => {
     const feesDoc = doc(db, "fees", id);
     await deleteDoc(feesDoc)
+}
+
+/*Transaction Collection*/
+export const createTransaction = async (transaction) => {
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
+    const lastUpdatedOn = new Date();
+    const docRef = await addDoc(transactionCollectionRef, { ...transaction, lastUpdatedBy, lastUpdatedOn })
+    return {
+        ...transaction,
+        id: docRef.id,
+        date: Timestamp.fromDate(transaction.date),
+        startTime: Timestamp.fromDate(transaction.startTime),
+        endTime: Timestamp.fromDate(transaction.endTime)
+    };
+}
+
+export const updateTransaction = async (id, transaction) => {
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
+    const lastUpdatedOn = new Date();
+    const transactionDoc = doc(db, "transaction", id);
+    await updateDoc(transactionDoc, { ...transaction, lastUpdatedBy, lastUpdatedOn })
+}
+
+export const getTransactions = async (start, end) => {
+    const q = query(transactionCollectionRef, where("date", ">=", start), where("date", "<", end))
+    const data = await getDocs(q);
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+}
+
+export const deleteTransaction = async (id) => {
+    const transactionDoc = doc(db, "transaction", id);
+    await deleteDoc(transactionDoc)
 }
 
 const provider = new GoogleAuthProvider();

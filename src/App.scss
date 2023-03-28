@@ -141,6 +141,15 @@ section.calendar-view {
   }
 }
 
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+
+  .form-field {
+    margin: 10px 0 !important;
+  }
+}
+
 .payment-details-form {
   display: flex;
   flex-direction: column;
@@ -212,6 +221,11 @@ section.calendar-view {
   flex-direction: column;
   gap: 20px;
   padding: 15px 0;
+}
+
+.transaction-list-filter {
+  display: flex;
+  gap: 15px;
 }
 
 .google-btn {
