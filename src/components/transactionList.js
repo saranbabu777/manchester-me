@@ -12,7 +12,8 @@ import TransactionListFooter from './transactionListFooter';
 const TransactionList = () => {
 
     const columns = [
-        { field: 'description', headerName: 'Description', width: 250 },
+        { field: 'date', headerName: 'Date', width: 100 },
+        { field: 'description', headerName: 'Description', width: 250, cellClassName: 'transaction-desc-cell' },
         { field: 'type', headerName: 'Type' },
         { field: 'cash', headerName: 'Cash' },
         { field: 'online', headerName: 'Online' },
@@ -28,7 +29,7 @@ const TransactionList = () => {
                     parseFloat(params.row.playspots)
                 ).toFixed(2)
         },
-        { field: 'lastUpdatedBy', headerName: 'Last Updated By', width: 200 },
+        { field: 'lastUpdatedBy', headerName: 'Last Updated By', width: 150, cellClassName: 'transaction-email-cell' },
         {
             field: "delete",
             headerName: "Delete",
@@ -92,16 +93,20 @@ const TransactionList = () => {
     }
 
     const gridRows = transactions.map(transaction => {
-        let { description, type, startTime, endTime } = transaction;
+        let { description, type, startTime, endTime, date, lastUpdatedBy } = transaction;
         if (type === 'game') {
             startTime = startTime?.toDate()
-                ?.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                ?.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
             endTime = endTime?.toDate()
-                ?.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-            description = `${startTime} to ${endTime}`
+                ?.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
+            description = `${startTime?.toLowerCase()} - ${endTime?.toLowerCase()}`
         }
+        date = date?.toDate()?.toLocaleDateString("en-GB");
+        lastUpdatedBy = lastUpdatedBy.split('@')[0]
         return {
             ...transaction,
+            date,
+            lastUpdatedBy,
             description
         }
     })

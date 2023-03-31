@@ -176,7 +176,7 @@ export const updateTransaction = async (id, transaction) => {
 }
 
 export const getTransactions = async (start, end) => {
-    const q = query(transactionCollectionRef, where("date", ">=", start), where("date", "<", end))
+    const q = query(transactionCollectionRef, where("date", ">=", start), where("date", "<", end), orderBy("date"))
     const data = await getDocs(q);
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
