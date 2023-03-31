@@ -84,7 +84,7 @@ const TransactionList = () => {
 
     const handleAddNewTransaction = () => {
         if (!showTransactionForm) {
-            /*Disable start/end dates and set it to current date*/
+            /*Set start/end dates to current date*/
             const today = new Date();
             setTransactionStartDate(today);
             setTransactionEndDate(today);
@@ -111,10 +111,12 @@ const TransactionList = () => {
         }
     })
 
-    const totalCash = transactions.reduce((prev, current) => {
-        const total = (current.type === 'expense') ? prev - parseFloat(current.cash) : prev + parseFloat(current.cash);
+    const total = transactions.reduce((prev, current) => {
+        const total = {};
+        total.cash = (current.type === 'expense') ? prev.cash - parseFloat(current.cash) : prev.cash + parseFloat(current.cash);
+        total.online = (current.type === 'expense') ? prev.online - parseFloat(current.online) : prev.online + parseFloat(current.online);
         return total;
-    }, 0)
+    }, { cash: 0, online: 0 })
 
     return (
         <>
@@ -160,7 +162,7 @@ const TransactionList = () => {
                                             Footer: TransactionListFooter
                                         }}
                                         componentsProps={{
-                                            footer: { totalCash }
+                                            footer: { total }
                                         }}
                                     />
                                 </div>
