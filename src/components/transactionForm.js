@@ -4,7 +4,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React from 'react';
 import useForm from '../common/hooks/useForm';
 
-const TransactionForm = ({ addTransaction, defaultDate }) => {
+const TransactionForm = ({ addTransaction, transaction }) => {
 
     const handleClick = () => {
         const copyState = {
@@ -16,8 +16,8 @@ const TransactionForm = ({ addTransaction, defaultDate }) => {
         if (state.type === 'game') {
             copyState.description = '';
         } else {
-            copyState.startTime = defaultDate;
-            copyState.endTime = defaultDate;
+            copyState.startTime = state.date;
+            copyState.endTime = state.date;
         }
         addTransaction(copyState)
     }
@@ -44,15 +44,16 @@ const TransactionForm = ({ addTransaction, defaultDate }) => {
 
     const { handleStateChange, handleChange, handleBlur, state, errors } = useForm({
         initState: {
-            date: defaultDate || new Date(),
-            startTime: defaultDate || new Date(),
-            endTime: defaultDate || new Date(),
-            description: "",
-            cash: 0,
-            online: 0,
-            type: "",
-            playspots: 0,
-            remarks: ""
+            id: transaction.id,
+            date: transaction.date || new Date(),
+            startTime: transaction.startTime || new Date(),
+            endTime: transaction.endTime || new Date(),
+            description: transaction.description || "",
+            cash: transaction.cash || 0,
+            online: transaction.online || 0,
+            type: transaction.type || "",
+            playspots: transaction.playspots || 0,
+            remarks: transaction.remarks || ""
         }, validator
     })
 
@@ -175,7 +176,7 @@ const TransactionForm = ({ addTransaction, defaultDate }) => {
                         </div>
                     </CardContent>
                     <CardActions>
-                        <Button variant="contained" onClick={handleClick}>Add Transaction</Button>
+                        <Button variant="contained" onClick={handleClick}>Save Transaction</Button>
                     </CardActions>
                 </LocalizationProvider>
             </Card>
