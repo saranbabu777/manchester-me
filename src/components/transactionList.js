@@ -96,9 +96,9 @@ const TransactionList = () => {
         let { description, type, startTime, endTime, date, lastUpdatedBy } = transaction;
         if (type === 'game') {
             startTime = startTime?.toDate()
-                ?.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
+                ?.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
             endTime = endTime?.toDate()
-                ?.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
+                ?.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
             description = `${startTime?.toLowerCase()} - ${endTime?.toLowerCase()}`
         }
         date = date?.toDate()?.toLocaleDateString("en-GB");
