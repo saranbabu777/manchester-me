@@ -22,9 +22,11 @@ const TransactionList = () => {
             field: 'total',
             headerName: 'Total',
             renderCell: (params) =>
-                parseFloat(params.row.cash) +
-                parseFloat(params.row.online) +
-                parseFloat(params.row.playspots)
+                parseFloat(
+                    parseFloat(params.row.cash) +
+                    parseFloat(params.row.online) +
+                    parseFloat(params.row.playspots)
+                ).toFixed(2)
         },
         { field: 'lastUpdatedBy', headerName: 'Last Updated By', width: 200 },
         {

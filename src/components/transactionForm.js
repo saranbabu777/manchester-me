@@ -7,7 +7,12 @@ import useForm from '../common/hooks/useForm';
 const TransactionForm = ({ addTransaction, defaultDate }) => {
 
     const handleClick = () => {
-        const copyState = { ...state }
+        const copyState = {
+            ...state,
+            cash: state.cash || 0,
+            online: state.online || 0,
+            playspots: state.playspots || 0
+        }
         if (state.type === 'game') {
             copyState.description = '';
         } else {
@@ -50,6 +55,13 @@ const TransactionForm = ({ addTransaction, defaultDate }) => {
             remarks: ""
         }, validator
     })
+
+    const allowNumbers = (e) => {
+        const onlyNumbers = /^\d*\.?\d*$/;
+        if (onlyNumbers.test(e.target.value)) {
+            handleChange(e)
+        }
+    }
 
     return (
         <>
@@ -132,7 +144,7 @@ const TransactionForm = ({ addTransaction, defaultDate }) => {
                                 <TextField label="Cash" variant="outlined"
                                     name="cash"
                                     value={state.cash}
-                                    onChange={handleChange}
+                                    onChange={allowNumbers}
                                     onBlur={handleBlur}
                                 />
                             </FormControl>
@@ -140,7 +152,7 @@ const TransactionForm = ({ addTransaction, defaultDate }) => {
                                 <TextField label="Online" variant="outlined"
                                     name="online"
                                     value={state.online}
-                                    onChange={handleChange}
+                                    onChange={allowNumbers}
                                     onBlur={handleBlur}
                                 />
                             </FormControl>
@@ -148,7 +160,7 @@ const TransactionForm = ({ addTransaction, defaultDate }) => {
                                 <TextField label="Playspots" variant="outlined"
                                     name="playspots"
                                     value={state.playspots}
-                                    onChange={handleChange}
+                                    onChange={allowNumbers}
                                     onBlur={handleBlur}
                                 />
                             </FormControl>

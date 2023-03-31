@@ -3,7 +3,9 @@ import React from 'react';
 
 const TransactionListFooter = (props) => {
     return (
-        <Box sx={{ padding: "10px", display: "flex", justifyContent: "flex-end", fontWeight: "bold" }}>Total Cash: {props.totalCash}</Box>
+        <Box sx={{ padding: "10px", display: "flex", justifyContent: "flex-end", fontWeight: "bold" }}>
+            Total Cash: {parseFloat(props.totalCash).toFixed(2)}
+        </Box>
     )
 }
 
