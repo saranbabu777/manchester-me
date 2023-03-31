@@ -157,6 +157,8 @@ export const createTransaction = async (transaction) => {
     const docRef = await addDoc(transactionCollectionRef, { ...transaction, lastUpdatedBy, lastUpdatedOn })
     return {
         ...transaction,
+        lastUpdatedBy,
+        lastUpdatedOn,
         id: docRef.id,
         date: Timestamp.fromDate(transaction.date),
         startTime: Timestamp.fromDate(transaction.startTime),
