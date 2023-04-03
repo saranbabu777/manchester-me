@@ -1,4 +1,4 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React from 'react';
@@ -33,29 +33,61 @@ const AddStudentForm = (props) => {
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <form className='add-student-form'>
-                    <FormControl>
-                        <TextField label="Name" variant="outlined" name="name" value={state.name} onChange={handleChange} />
+                    <FormControl error={errors.name}>
+                        <TextField
+                            label="Name"
+                            ariant="outlined"
+                            name="name"
+                            required
+                            value={state.name}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {errors.name &&
+                            <FormHelperText>Name is Required</FormHelperText>
+                        }
                     </FormControl>
-                    <FormControl>
-                        <TextField label="Phone" variant="outlined" name="phone" value={state.phone} onChange={handleChange} />
+                    <FormControl error={errors.phone}>
+                        <TextField
+                            label="Phone"
+                            variant="outlined"
+                            name="phone"
+                            required
+                            value={state.phone}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+                        {errors.phone &&
+                            <FormHelperText>Phone is Required</FormHelperText>
+                        }
                     </FormControl>
-                    <FormControl>
+                    <FormControl error={errors.dob}>
                         <DesktopDatePicker
                             label="Date of Birth"
                             inputFormat="dd/MM/yyyy"
+                            required
                             value={state.dob}
                             onChange={(value) => handleStateChange({ name: 'dob', value })}
+                            onBlur={(e) => { handleBlur({ target: { name: 'dob' } }) }}
                             renderInput={(params) => <TextField {...params} />}
                         />
+                        {errors.dob &&
+                            <FormHelperText>DOB is Required</FormHelperText>
+                        }
                     </FormControl>
-                    <FormControl>
+                    <FormControl error={errors.doj}>
                         <DesktopDatePicker
                             label="Date Of Joining"
                             inputFormat="dd/MM/yyyy"
+                            required
                             value={state.doj}
                             onChange={(value) => handleStateChange({ name: 'doj', value })}
+                            onBlur={(e) => { handleBlur({ target: { name: 'doj' } }) }}
                             renderInput={(params) => <TextField {...params} />}
                         />
+                        {errors.doj &&
+                            <FormHelperText>DOJ is Required</FormHelperText>
+                        }
                     </FormControl>
                     {props.editMode &&
                         <FormControl className='form-field' sx={{ minWidth: 120 }}>

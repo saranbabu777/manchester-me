@@ -81,6 +81,10 @@ const Academy = () => {
     }
 
     const saveStudent = async (student) => {
+        if (!student.name || !student.phone || !student.dob || !student.doj) {
+            addNotification('Please fill all required fields', 'error');
+            return;
+        }
         const lastRecord = await getLastStudentRecord();
         if (lastRecord[0].studentId) {
             const studentId = Number(lastRecord[0].studentId) + 1;

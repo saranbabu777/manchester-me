@@ -97,6 +97,10 @@ const StudentDetails = () => {
     }
 
     const saveStudent = async (event) => {
+        if (!event.name || !event.phone || !event.dob || !event.doj) {
+            addNotification('Please fill all required fields', 'error');
+            return;
+        }
         await updateStudent(student.id, event);
         getStudentDetails();/*update student state*/
         addNotification('Student saved successfully', 'success');

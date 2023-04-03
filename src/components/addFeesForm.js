@@ -1,4 +1,4 @@
-import { Autocomplete, Button, FormControl, TextField } from "@mui/material";
+import { Autocomplete, Button, FormControl, FormHelperText, TextField } from "@mui/material";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import React from "react";
@@ -53,45 +53,69 @@ const AddFeesForm = (props) => {
         <>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <form className='add-fees-form'>
-                    <FormControl>
+                    <FormControl error={errors.date}>
                         <DesktopDatePicker
                             label="Date Of Payment"
                             inputFormat="dd/MM/yyyy"
+                            required
                             value={state.date}
                             onChange={(value) => handleStateChange({ name: 'date', value })}
+                            onBlur={(e) => { handleBlur({ target: { name: 'date' } }) }}
                             renderInput={(params) => <TextField {...params} />}
                         />
+                        {errors.date &&
+                            <FormHelperText>Date is Required</FormHelperText>
+                        }
                     </FormControl>
-                    <FormControl>
+                    <FormControl error={errors.amount}>
                         <TextField label="Amount" variant="outlined"
                             name="amount"
+                            required
                             value={state.amount}
                             onChange={handleChange}
+                            onBlur={handleBlur}
                         />
+                        {errors.amount &&
+                            <FormHelperText>Amount is Required</FormHelperText>
+                        }
                     </FormControl>
-                    <FormControl>
+                    <FormControl error={errors.for}>
                         <Autocomplete
                             disablePortal
+                            required
                             onChange={(event, newValue) => handleStateChange({ name: 'for', value: newValue ? newValue.value : '' })}
+                            onBlur={(e) => { handleBlur({ target: { name: 'for' } }) }}
                             options={typeList}
                             renderInput={(params) => <TextField {...params} label="For" />}
                         />
+                        {errors.for &&
+                            <FormHelperText>Field is Required</FormHelperText>
+                        }
                     </FormControl>
-                    <FormControl>
+                    <FormControl error={errors.month}>
                         <Autocomplete
                             disablePortal
                             onChange={(event, newValue) => handleStateChange({ name: 'month', value: newValue ? newValue.value : '' })}
+                            onBlur={(e) => { handleBlur({ target: { name: 'month' } }) }}
                             options={monthList}
                             renderInput={(params) => <TextField {...params} label="Fee Towards Month" />}
                         />
+                        {errors.month &&
+                            <FormHelperText>Field is Required</FormHelperText>
+                        }
                     </FormControl>
-                    <FormControl>
+                    <FormControl error={errors.year}>
                         <Autocomplete
                             disablePortal
+                            required
                             onChange={(event, value) => handleStateChange({ name: 'year', value })}
+                            onBlur={(e) => { handleBlur({ target: { name: 'year' } }) }}
                             options={yearList}
                             renderInput={(params) => <TextField {...params} label="Fee Towards Year" />}
                         />
+                        {errors.year &&
+                            <FormHelperText>Field is Required</FormHelperText>
+                        }
                     </FormControl>
                 </form>
                 <Button variant="contained" onClick={() => { props.saveFees(state) }}>Save</Button>
