@@ -70,7 +70,7 @@ const TransactionForm = ({ addTransaction, transaction }) => {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <CardContent>
                         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            Add new transaction
+                            {transaction.id ? 'Edit transaction' : 'Add new transaction'}
                         </Typography>
                         <div className='transaction-form'>
                             <FormControl className='form-field' error={errors.date}>

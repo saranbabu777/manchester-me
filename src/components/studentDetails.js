@@ -82,10 +82,14 @@ const StudentDetails = () => {
     }
 
     const saveFees = async (fees) => {
-        await createFees({ ...fees, studentId: Number(params.studentId) });
-        getFees();
-        addNotification('Fees saved successfully', 'success');
-        setAddNewForm(false);
+        if (fees.for && fees.month && fees.year) {
+            await createFees({ ...fees, studentId: Number(params.studentId) });
+            getFees();
+            addNotification('Fees saved successfully', 'success');
+            setAddNewForm(false);
+        } else {
+            addNotification('Please fill all required fields', 'error');
+        }
     }
 
     const toggleEditForm = () => {
