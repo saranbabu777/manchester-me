@@ -6,9 +6,11 @@ import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React, { useEffect, useState } from 'react';
 import useNotification from '../common/hooks/useNotification';
-import { createTransaction, deleteTransaction, getTransactions, updateTransaction } from '../services/api.service';
+import { createTransaction, deleteTransaction, getLatestAuditDetails, getTransactions, updateTransaction } from '../services/api.service';
 import TransactionForm from './transactionForm';
 import TransactionListFooter from './transactionListFooter';
+import CreateAuditDialog from './createAuditDialog';
+import useAuthentication from '../common/hooks/useAuthentication';
 
 const TransactionList = () => {
 
@@ -38,10 +40,11 @@ const TransactionList = () => {
                     e.stopPropagation();
                     editTransaction(params.id, params.row);
                 }
+                const disabledActions = unsettledDate && new Date(params.row.date).getTime() < new Date(unsettledDate).getTime();
                 return (
                     <>
-                        <Button onClick={editRow}><EditIcon /></Button>
-                        <Button onClick={deleteRow}><DeleteIcon /></Button>
+                        <Button onClick={editRow} disabled={disabledActions}><EditIcon /></Button>
+                        <Button onClick={deleteRow} disabled={disabledActions}><DeleteIcon /></Button>
                     </>
                 );
             }
@@ -53,12 +56,28 @@ const TransactionList = () => {
     const [transactionEndDate, setTransactionEndDate] = useState(new Date());
     const [showTransactionForm, setShowTransactionForm] = useState(false);
     const [editRowData, setEditRowData] = useState({});
+    const [openAuditDialog, setOpenAuditDialog] = useState(false);
+    const [unsettledDate, setUnsettledDate] = useState(null);
 
+    const { auth, permission } = useAuthentication();
     const { addNotification } = useNotification();
 
     useEffect(() => {
         fetchTransactions();
     }, [transactionEndDate])
+
+    useEffect(() => {
+        const getAuditRecords = async () => {
+            const records = await getLatestAuditDetails();
+            if (records.length > 0) {
+                const auditLastDate = new Date(records[0].transactionEndDate.toDate());
+                auditLastDate.setHours(0, 0, 0, 0);
+                auditLastDate.setDate(auditLastDate.getDate() + 1);
+                setUnsettledDate(auditLastDate);
+            }
+        }
+        getAuditRecords();
+    }, [])
 
     const fetchTransactions = async () => {
         const startDate = new Date(transactionStartDate);
@@ -92,6 +111,14 @@ const TransactionList = () => {
     const editTransaction = (id, data) => {
         setEditRowData({ ...data, id });
         setShowTransactionForm(true);
+    }
+
+    const handleSettledClick = () => {
+        setOpenAuditDialog(true);
+    }
+
+    const handleCloseAuditDialog = () => {
+        setOpenAuditDialog(false);
     }
 
     const gridRows = transactions.map(transaction => {
@@ -157,6 +184,12 @@ const TransactionList = () => {
                                     renderInput={(params) => <TextField name="endDate" {...params} />}
                                 />
                             </div>
+                            {(auth?.role === permission.ADMIN) &&
+                                <Button className='transform-none' variant="contained" onClick={handleSettledClick}>
+                                    Mark as Settled
+                                </Button>
+                            }
+                            <CreateAuditDialog open={openAuditDialog} handleClose={handleCloseAuditDialog} audit={{ transactionStartDate, transactionEndDate }} />
                         </div>
                         {!showTransactionForm &&
                             <>

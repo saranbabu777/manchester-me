@@ -8,6 +8,7 @@ const attendanceCollectionRef = collection(db, "attendance");
 const studentsCollectionRef = collection(db, "students");
 const feesCollectionRef = collection(db, "fees");
 const transactionCollectionRef = collection(db, "transaction");
+const auditCollectionRef = collection(db, "audit");
 
 /*Attendance Collection*/
 export const createAttendance = async (attendance) => {
@@ -184,6 +185,21 @@ export const getTransactions = async (start, end) => {
 export const deleteTransaction = async (id) => {
     const transactionDoc = doc(db, "transaction", id);
     await deleteDoc(transactionDoc)
+}
+
+/*Audit Collection*/
+export const createAudit = async (audit) => {
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
+    const lastUpdatedOn = new Date();
+    await addDoc(auditCollectionRef, { ...audit, lastUpdatedBy, lastUpdatedOn })
+}
+
+export const getLatestAuditDetails = async () => {
+    const q = query(auditCollectionRef, orderBy("transactionEndDate", "desc"), limit(1))
+    const data = await getDocs(q);
+    return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
 
 const provider = new GoogleAuthProvider();
