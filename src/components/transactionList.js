@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, TextField, Typography, darken } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
@@ -11,6 +11,13 @@ import TransactionForm from './transactionForm';
 import TransactionListFooter from './transactionListFooter';
 import CreateAuditDialog from './createAuditDialog';
 import useAuthentication from '../common/hooks/useAuthentication';
+import styled from '@emotion/styled';
+
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+    '& .transaction-grid-theme--expense': {
+        color: darken(theme.palette.error.main, 0.1),
+    }
+}));
 
 const TransactionList = () => {
 
@@ -186,7 +193,7 @@ const TransactionList = () => {
                             </div>
                             {(auth?.role === permission.ADMIN) &&
                                 <Button className='transform-none' variant="contained" onClick={handleSettledClick}>
-                                    Mark as Settled
+                                    Settle
                                 </Button>
                             }
                             <CreateAuditDialog open={openAuditDialog} handleClose={handleCloseAuditDialog} audit={{ transactionStartDate, transactionEndDate }} />
@@ -197,8 +204,9 @@ const TransactionList = () => {
                                     Transactions from {transactionStartDate?.toDateString()} to {transactionEndDate?.toDateString()}
                                 </Typography>
                                 <div style={{ height: 300, width: '100%' }}>
-                                    <DataGrid
+                                    <StyledDataGrid
                                         sx={{ textTransform: 'capitalize' }}
+                                        getRowClassName={(params) => `transaction-grid-theme--${params.row.type}`}
                                         rows={gridRows}
                                         columns={columns}
                                         disableSelectionOnClick
