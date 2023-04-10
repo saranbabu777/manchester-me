@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, TextField, Typography, darken } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography, darken } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid } from '@mui/x-data-grid';
@@ -65,13 +65,14 @@ const TransactionList = () => {
     const [editRowData, setEditRowData] = useState({});
     const [openAuditDialog, setOpenAuditDialog] = useState(false);
     const [unsettledDate, setUnsettledDate] = useState(null);
+    const [privateTransactions, setPrivateTransactions] = useState(false);
 
     const { auth, permission } = useAuthentication();
     const { addNotification } = useNotification();
 
     useEffect(() => {
         fetchTransactions();
-    }, [transactionEndDate])
+    }, [transactionEndDate, privateTransactions])
 
     useEffect(() => {
         const getAuditRecords = async () => {
@@ -92,7 +93,7 @@ const TransactionList = () => {
         const endDate = new Date(transactionEndDate);
         endDate.setHours(0, 0, 0, 0);
         endDate.setDate(endDate.getDate() + 1);
-        const transactions = await getTransactions(startDate, endDate);
+        const transactions = await getTransactions(startDate, endDate, privateTransactions);
         setTransactions(transactions);
     }
 
@@ -168,6 +169,17 @@ const TransactionList = () => {
             <Card sx={{ minWidth: 275 }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <CardContent>
+                        {(auth?.role === permission.ADMIN) &&
+                            <div>
+                                <FormControlLabel control={
+                                    <Checkbox
+                                        sx={{ margin: '15px 0' }}
+                                        checked={privateTransactions}
+                                        onChange={(e) => { setPrivateTransactions(e.target.checked) }}
+                                    />
+                                } label="Include Private Transactions" />
+                            </div>
+                        }
                         <div className='transaction-list-filter'>
                             <div className='date-picker'>
                                 <DesktopDatePicker

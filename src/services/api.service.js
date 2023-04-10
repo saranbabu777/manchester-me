@@ -176,8 +176,10 @@ export const updateTransaction = async (id, transaction) => {
     await updateDoc(transactionDoc, { ...transaction, lastUpdatedBy, lastUpdatedOn })
 }
 
-export const getTransactions = async (start, end) => {
-    const q = query(transactionCollectionRef, where("date", ">=", start), where("date", "<", end), orderBy("date"))
+export const getTransactions = async (start, end, includePrivate) => {
+    const constraints = includePrivate ? [] : [where("private", "==", false)];
+    constraints.push(orderBy("date"));
+    const q = query(transactionCollectionRef, where("date", ">=", start), where("date", "<", end), ...constraints)
     const data = await getDocs(q);
     return data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 }
@@ -254,4 +256,15 @@ export const dataMigration = async () => {
     //     studentId: (101 + index),
     // })
     // });
+}
+
+export const bulkUpdate = async () => {
+    // const q = query(transactionCollectionRef)
+    // const data = await getDocs(q);
+    // const loopT = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    // loopT.forEach(async (transaction, key) => {
+    //     const transactionDoc = doc(db, "transaction", transaction.id);
+    //     await updateDoc(transactionDoc, { private: false })
+    //     console.log(key, ' updated successfully')
+    // })
 }

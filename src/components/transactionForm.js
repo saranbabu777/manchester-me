@@ -1,10 +1,13 @@
-import { Button, Card, CardActions, CardContent, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Checkbox, FormControl, FormControlLabel, FormHelperText, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import { DesktopDatePicker, LocalizationProvider, MobileTimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import React from 'react';
 import useForm from '../common/hooks/useForm';
+import useAuthentication from '../common/hooks/useAuthentication';
 
 const TransactionForm = ({ addTransaction, transaction }) => {
+
+    const { auth, permission } = useAuthentication();
 
     const handleClick = () => {
         const copyState = {
@@ -53,7 +56,8 @@ const TransactionForm = ({ addTransaction, transaction }) => {
             online: transaction.online || 0,
             type: transaction.type || "",
             playspots: transaction.playspots || 0,
-            remarks: transaction.remarks || ""
+            remarks: transaction.remarks || "",
+            private: false
         }, validator
     })
 
@@ -176,6 +180,14 @@ const TransactionForm = ({ addTransaction, transaction }) => {
                         </div>
                     </CardContent>
                     <CardActions>
+                        {(auth?.role === permission.ADMIN) &&
+                            <FormControlLabel control={
+                                <Checkbox
+                                    checked={state.private}
+                                    onChange={(e) => { handleStateChange({ name: 'private', value: e.target.checked }) }}
+                                />
+                            } label="Private" />
+                        }
                         <Button variant="contained" onClick={handleClick}>Save Transaction</Button>
                     </CardActions>
                 </LocalizationProvider>
