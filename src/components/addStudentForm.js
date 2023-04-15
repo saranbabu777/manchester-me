@@ -65,6 +65,7 @@ const AddStudentForm = (props) => {
                         <DesktopDatePicker
                             label="Date of Birth"
                             inputFormat="dd/MM/yyyy"
+                            format="dd/MM/yyyy"
                             required
                             value={state.dob}
                             onChange={(value) => handleStateChange({ name: 'dob', value })}
@@ -79,6 +80,7 @@ const AddStudentForm = (props) => {
                         <DesktopDatePicker
                             label="Date Of Joining"
                             inputFormat="dd/MM/yyyy"
+                            format="dd/MM/yyyy"
                             required
                             value={state.doj}
                             onChange={(value) => handleStateChange({ name: 'doj', value })}

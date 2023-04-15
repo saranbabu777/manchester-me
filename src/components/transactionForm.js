@@ -81,6 +81,7 @@ const TransactionForm = ({ addTransaction, transaction }) => {
                                 <DesktopDatePicker
                                     label="Date"
                                     inputFormat="dd/MM/yyyy"
+                                    format="dd/MM/yyyy"
                                     name="date"
                                     required
                                     value={state.date}

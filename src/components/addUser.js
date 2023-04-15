@@ -112,6 +112,7 @@ const AddUser = () => {
                                 <DesktopDatePicker
                                     label="Date Of Joining"
                                     inputFormat="dd/MM/yyyy"
+                                    format="dd/MM/yyyy"
                                     name="doj"
                                     required
                                     value={state.doj}

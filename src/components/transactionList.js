@@ -185,6 +185,7 @@ const TransactionList = () => {
                                 <DesktopDatePicker
                                     label="From Date"
                                     inputFormat="dd/MM/yyyy"
+                                    format="dd/MM/yyyy"
                                     name="startDate"
                                     value={transactionStartDate}
                                     disabled={showTransactionForm}
@@ -196,6 +197,7 @@ const TransactionList = () => {
                                 <DesktopDatePicker
                                     label="To Date"
                                     inputFormat="dd/MM/yyyy"
+                                    format="dd/MM/yyyy"
                                     name="endDate"
                                     value={transactionEndDate}
                                     disabled={showTransactionForm}

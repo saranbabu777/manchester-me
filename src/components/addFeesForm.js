@@ -57,6 +57,7 @@ const AddFeesForm = (props) => {
                         <DesktopDatePicker
                             label="Date Of Payment"
                             inputFormat="dd/MM/yyyy"
+                            format="dd/MM/yyyy"
                             required
                             value={state.date}
                             onChange={(value) => handleStateChange({ name: 'date', value })}

@@ -87,6 +87,7 @@ const Attendance = () => {
                                 <DesktopDatePicker
                                     label="Select Date"
                                     inputFormat="dd/MM/yyyy"
+                                    format="dd/MM/yyyy"
                                     value={attendanceForm.date}
                                     onChange={(value) => handleChange({ date: value })}
                                     renderInput={(params) => <TextField {...params} />}
