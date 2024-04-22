@@ -8,6 +8,7 @@ import { createStudent, deleteStudent, getLastStudentRecord, getStudents } from 
 import AddStudentForm from './addStudentForm';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { darken, lighten, styled } from '@mui/material/styles';
+import useLoader from '../common/hooks/useLoader';
 
 const getBackgroundColor = (color, mode) =>
     mode === 'dark' ? darken(color, 0.7) : lighten(color, 0.7);
@@ -60,6 +61,7 @@ const Academy = () => {
     const [addNewForm, setAddNewForm] = useState(false);
     const navigate = useNavigate();
     const { addNotification } = useNotification();
+    const { showLoader, hideLoader } = useLoader();
     const [columnVisibilityModel, setColumnVisibilityModel] = useState({ action: false });
     const { auth, permission } = useAuthentication();
 
@@ -72,8 +74,10 @@ const Academy = () => {
     }, [])
 
     const getList = async () => {
+        showLoader();
         const response = await getStudents();
         setStudents(response.map(x => ({ ...x, active: x.active ? 'Active' : 'Inactive' })));
+        hideLoader();
     }
 
     const getStudentDetails = (studentId) => {
@@ -85,15 +89,24 @@ const Academy = () => {
             addNotification('Please fill all required fields', 'error');
             return;
         }
-        const lastRecord = await getLastStudentRecord();
-        if (lastRecord[0].studentId) {
-            const studentId = Number(lastRecord[0].studentId) + 1;
-            await createStudent({ ...student, studentId });
-            getList();
-            addNotification('Student saved successfully', 'success');
-            setAddNewForm(false);
-        } else {
-            addNotification('Unable to save student!', 'error');
+        try{
+            showLoader();
+            const lastRecord = await getLastStudentRecord();
+            if (lastRecord) {
+                const lastId = (lastRecord.length > 0) ? Number(lastRecord[0].studentId) : 0;
+                const studentId = lastId + 1;
+                await createStudent({ ...student, studentId });
+                getList();
+                hideLoader();
+                addNotification('Student saved successfully', 'success');
+                setAddNewForm(false);
+            } else {
+                hideLoader();
+                addNotification('Unable to save student!', 'error');
+            }
+        } catch(e){
+            console.log(e)
+            hideLoader();
         }
     }
 

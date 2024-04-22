@@ -8,7 +8,7 @@ const typeList = [
     { label: `Registration Fees`, value: `registration_fees` },
     { label: `Monthly Fees`, value: `monthly_fees` }
 ]
-const yearList = [`2021`, `2022`, `2023`]
+const yearList = [`2021`, `2022`, `2023`, `2024`]
 const monthList = [
     { label: `January`, value: `jan` },
     { label: `February`, value: `feb` },

@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddStudentForm from './addStudentForm';
 import PendingFees from './pendingFees';
+import useLoader from '../common/hooks/useLoader';
 
 const monthShortNames = [`jan`, `feb`, `mar`, `apr`, `may`, `jun`,
     `jul`, `aug`, `sep`, `oct`, `nov`, `dec`];
@@ -54,6 +55,7 @@ const StudentDetails = () => {
     const [editStudentForm, setEditStudentForm] = useState(false);
     const params = useParams();
     const { addNotification } = useNotification();
+    const { showLoader, hideLoader } = useLoader();
     const [columnVisibilityModel, setColumnVisibilityModel] = useState({ action: false });
     const { auth, permission } = useAuthentication();
 
@@ -82,13 +84,21 @@ const StudentDetails = () => {
     }
 
     const saveFees = async (fees) => {
-        if (fees.for && fees.month && fees.year) {
-            await createFees({ ...fees, studentId: Number(params.studentId) });
-            getFees();
-            addNotification('Fees saved successfully', 'success');
-            setAddNewForm(false);
-        } else {
-            addNotification('Please fill all required fields', 'error');
+        try{
+            showLoader();
+            if (fees.for && fees.month && fees.year) {
+                await createFees({ ...fees, studentId: Number(params.studentId) });
+                getFees();
+                hideLoader();
+                addNotification('Fees saved successfully', 'success');
+                setAddNewForm(false);
+            } else {
+                hideLoader();
+                addNotification('Please fill all required fields', 'error');
+            }
+        } catch(e){
+            console.log(e);
+            hideLoader();
         }
     }
 

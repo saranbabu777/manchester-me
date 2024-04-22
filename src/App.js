@@ -18,6 +18,8 @@ import PrivateRoute from './components/privateRoute';
 import Academy from './components/academy';
 import StudentDetails from './components/studentDetails';
 import TransactionList from './components/transactionList';
+import Loader from './components/loader';
+import LoaderProvider from './common/providers/loaderProvider';
 
 function App() {
   return (
@@ -25,25 +27,28 @@ function App() {
       <ThemeProvider theme={darkTheme}>
         <AuthProvider>
           <NotificationProvider>
-            <Header />
-            <div className='main-content'>
-              <Routes>
-                <Route exact path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/academy" element={<PrivateRoute><Academy /></PrivateRoute>} />
-                <Route path="/transactions" element={<PrivateRoute><TransactionList /></PrivateRoute>} />
-                <Route path="/student/:studentId" element={<PrivateRoute><StudentDetails /></PrivateRoute>} />
-                <Route path="/add-user" element={<PrivateRoute role='admin'><AddUser /></PrivateRoute>} />
-                <Route path="/user-details/:email" element={<PrivateRoute role='admin'><UserDetails /></PrivateRoute>} />
-                <Route path="/add-payment" element={<PrivateRoute><AddPayment /></PrivateRoute>} />
-                <Route path="/manage-leave" element={<PrivateRoute role='staff'><ManageLeave /></PrivateRoute>} />
-                <Route path="/salary" element={<PrivateRoute role='staff'><Salary /></PrivateRoute>} />
-                <Route path="/attendance/:status" element={<PrivateRoute><Attendance /></PrivateRoute>} />
-                <Route path="/attendance" element={<PrivateRoute><Attendance /></PrivateRoute>} />
-                <Route path="*" element={<Navigate to="/login" replace />} />
-              </Routes>
-            </div>
-            <Notification />
+            <LoaderProvider>
+              <Header />
+              <div className='main-content'>
+                <Routes>
+                  <Route exact path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/academy" element={<PrivateRoute><Academy /></PrivateRoute>} />
+                  <Route path="/transactions" element={<PrivateRoute><TransactionList /></PrivateRoute>} />
+                  <Route path="/student/:studentId" element={<PrivateRoute><StudentDetails /></PrivateRoute>} />
+                  <Route path="/add-user" element={<PrivateRoute role='admin'><AddUser /></PrivateRoute>} />
+                  <Route path="/user-details/:email" element={<PrivateRoute role='admin'><UserDetails /></PrivateRoute>} />
+                  <Route path="/add-payment" element={<PrivateRoute><AddPayment /></PrivateRoute>} />
+                  <Route path="/manage-leave" element={<PrivateRoute role='staff'><ManageLeave /></PrivateRoute>} />
+                  <Route path="/salary" element={<PrivateRoute role='staff'><Salary /></PrivateRoute>} />
+                  <Route path="/attendance/:status" element={<PrivateRoute><Attendance /></PrivateRoute>} />
+                  <Route path="/attendance" element={<PrivateRoute><Attendance /></PrivateRoute>} />
+                  <Route path="*" element={<Navigate to="/login" replace />} />
+                </Routes>
+              </div>
+              <Notification />
+              <Loader />
+            </LoaderProvider>
           </NotificationProvider>
         </AuthProvider>
       </ThemeProvider>

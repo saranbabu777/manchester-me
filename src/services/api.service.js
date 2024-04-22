@@ -2,11 +2,14 @@ import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc, query, where, o
 import { GoogleAuthProvider, signInWithPopup, signOut } from "@firebase/auth";
 import { db, auth } from '../firebase.config';
 
+const studentsCollection = "students_season2";
+const feesCollection = "fees_season2";
+
 const usersCollectionRef = collection(db, "users");
 const paymentCollectionRef = collection(db, "payment");
 const attendanceCollectionRef = collection(db, "attendance");
-const studentsCollectionRef = collection(db, "students");
-const feesCollectionRef = collection(db, "fees");
+const studentsCollectionRef = collection(db, studentsCollection);
+const feesCollectionRef = collection(db, feesCollection);
 const transactionCollectionRef = collection(db, "transaction");
 const auditCollectionRef = collection(db, "audit");
 
@@ -102,7 +105,7 @@ export const updateStudent = async (id, student) => {
     const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
     const lastUpdatedBy = email || '';
     const lastUpdatedOn = new Date();
-    const studentDoc = doc(db, "students", id);
+    const studentDoc = doc(db, studentsCollection, id);
     await updateDoc(studentDoc, { ...student, lastUpdatedBy, lastUpdatedOn })
 }
 
@@ -125,7 +128,7 @@ export const getLastStudentRecord = async () => {
 }
 
 export const deleteStudent = async (id) => {
-    const studentDoc = doc(db, "students", id);
+    const studentDoc = doc(db, studentsCollection, id);
     await deleteDoc(studentDoc)
 }
 
@@ -145,7 +148,7 @@ export const getFeesByStudentId = async (studentId) => {
 }
 
 export const deleteFees = async (id) => {
-    const feesDoc = doc(db, "fees", id);
+    const feesDoc = doc(db, feesCollection, id);
     await deleteDoc(feesDoc)
 }
 
