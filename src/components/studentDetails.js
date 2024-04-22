@@ -4,13 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAuthentication from '../common/hooks/useAuthentication';
 import useNotification from '../common/hooks/useNotification';
-import { createFees, getFeesByStudentId, deleteFees, getStudentByStudentId, updateStudent } from '../services/api.service';
+import { createFees, getFeesByStudentId, deleteFees, getStudentByStudentId, updateStudent, createStudentAttendance, filterStudentAttendance } from '../services/api.service';
 import AddFeesForm from './addFeesForm';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddStudentForm from './addStudentForm';
 import PendingFees from './pendingFees';
 import useLoader from '../common/hooks/useLoader';
+import StudentAttendanceForm from './studentAttendanceForm';
+import Calendar from './calendar';
 
 const monthShortNames = [`jan`, `feb`, `mar`, `apr`, `may`, `jun`,
     `jul`, `aug`, `sep`, `oct`, `nov`, `dec`];
@@ -50,6 +52,7 @@ const columns = [
 
 const StudentDetails = () => {
     const [addNewForm, setAddNewForm] = useState(false);
+    const [markAttendanceForm, setMarkAttendanceForm] = useState(false);
     const [fees, setFees] = useState([]);
     const [student, setStudent] = useState({});
     const [editStudentForm, setEditStudentForm] = useState(false);
@@ -95,6 +98,31 @@ const StudentDetails = () => {
             } else {
                 hideLoader();
                 addNotification('Please fill all required fields', 'error');
+            }
+        } catch(e){
+            console.log(e);
+            hideLoader();
+        }
+    }
+
+    const saveAttendance = async (attendance) => {
+        try{
+            showLoader();
+            const studentId = Number(params.studentId);
+            const startDate = new Date(attendance.date);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(attendance.date);
+            endDate.setHours(0, 0, 0, 0);
+            endDate.setDate(endDate.getDate() + 1);
+            const existingRecords = await filterStudentAttendance(studentId, startDate, endDate);
+            if (existingRecords.length === 0) {
+                await createStudentAttendance({...attendance, studentId});
+                hideLoader();
+                addNotification('Attendance saved successfully', 'success')
+                setMarkAttendanceForm(false);
+            } else {
+                hideLoader();
+                addNotification('Attendance record already exist', 'error')
             }
         } catch(e){
             console.log(e);
@@ -155,10 +183,22 @@ const StudentDetails = () => {
                             <AddFeesForm saveFees={saveFees} />
                         </>
                     }
+                    {markAttendanceForm &&
+                        <>
+                            <Typography sx={{ fontSize: 14, paddingTop: '10px', fontWeight: 'bold' }} color="text.secondary" gutterBottom>
+                                Attendance
+                            </Typography>
+                            <Calendar studentId={Number(params.studentId)} />
+                            <StudentAttendanceForm onSubmit={saveAttendance} />
+                        </>
+                    }
                 </CardContent>
                 <CardActions>
                     {!addNewForm &&
                         <Button variant="contained" onClick={() => { setAddNewForm(true); }}>Add Fees</Button>
+                    }
+                    {!markAttendanceForm &&
+                        <Button variant="contained" onClick={() => { setMarkAttendanceForm(true); }}>Attendance</Button>
                     }
                 </CardActions>
             </Card>

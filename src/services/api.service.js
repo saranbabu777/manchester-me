@@ -8,6 +8,7 @@ const feesCollection = "fees_season2";
 const usersCollectionRef = collection(db, "users");
 const paymentCollectionRef = collection(db, "payment");
 const attendanceCollectionRef = collection(db, "attendance");
+const studentAttendanceCollectionRef = collection(db, "student_attendance");
 const studentsCollectionRef = collection(db, studentsCollection);
 const feesCollectionRef = collection(db, feesCollection);
 const transactionCollectionRef = collection(db, "transaction");
@@ -24,6 +25,22 @@ export const createAttendance = async (attendance) => {
 
 export const filterAttendance = async (email, start, end) => {
     const q = query(attendanceCollectionRef, where("email", "==", email), where("date", ">=", start), where("date", "<", end))
+    const data = await getDocs(q);
+    const parsedAttendance = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => ({ ...doc, date: doc.date.toDate() }));
+    return parsedAttendance;
+}
+
+/*Student Attendance Collection*/
+export const createStudentAttendance = async (attendance) => {
+    const currentUserObject = localStorage.getItem('man-client-user-inf');
+    const { email } = currentUserObject ? JSON.parse(currentUserObject) : {};
+    const lastUpdatedBy = email || '';
+    const lastUpdatedOn = new Date();
+    await addDoc(studentAttendanceCollectionRef, { ...attendance, lastUpdatedBy, lastUpdatedOn })
+}
+
+export const filterStudentAttendance = async (studentId, start, end) => {
+    const q = query(studentAttendanceCollectionRef, where("studentId", "==", studentId), where("date", ">=", start), where("date", "<", end))
     const data = await getDocs(q);
     const parsedAttendance = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })).map((doc) => ({ ...doc, date: doc.date.toDate() }));
     return parsedAttendance;

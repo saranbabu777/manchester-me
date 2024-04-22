@@ -1,9 +1,9 @@
 import { IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { filterAttendance } from '../services/api.service';
+import { filterAttendance, filterStudentAttendance } from '../services/api.service';
 import { NavigateBefore, NavigateNext } from '@mui/icons-material';
 
-const Calendar = (props) => {
+const Calendar = ({email, studentId}) => {
     const [attendance, setAttendance] = useState([]);
     const [daysOfMonth, setDaysOfMonth] = useState([]);
     const [dateInCalendar, setDateInCalendar] = useState(new Date());
@@ -14,7 +14,7 @@ const Calendar = (props) => {
 
     useEffect(() => {
         getAttendanceDetails(dateInCalendar);
-    }, [props.email])
+    }, [email, studentId])
 
     const calcDaysOfMonth = (date) => {
         const days = getAllDaysInMonth(date.getFullYear(), date.getMonth())
@@ -27,7 +27,7 @@ const Calendar = (props) => {
         const y = date.getFullYear(), m = date.getMonth();
         const monthStartDate = new Date(y, m, 1);
         const nextMonthStartDate = new Date(y, m + 1, 1);
-        const data = await filterAttendance(props.email, monthStartDate, nextMonthStartDate);
+        const data = email ? await filterAttendance(email, monthStartDate, nextMonthStartDate) : await filterStudentAttendance(studentId, monthStartDate, nextMonthStartDate);
         setAttendance((prev) => {
             return data;
         });
