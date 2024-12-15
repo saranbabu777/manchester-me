@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from '@mui/material';
 import useAuthentication from '../common/hooks/useAuthentication';
 
-const yearList = [2022, 2023]
+const yearList = [2022, 2023, 2024]
 const monthList = [
     { label: `January`, value: 0 },
     { label: `February`, value: 1 },

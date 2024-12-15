@@ -15,7 +15,7 @@ import useForm from '../common/hooks/useForm';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-const yearList = [2022, 2023]
+const yearList = [2022, 2023, 2024]
 const monthList = [
     { label: `January`, value: `jan` },
     { label: `February`, value: `feb` },
