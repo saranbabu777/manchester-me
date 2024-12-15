@@ -1,9 +1,9 @@
 import { IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { filterAttendance, filterStudentAttendance } from '../services/api.service';
+import { deleteAttendance, filterAttendance, filterStudentAttendance } from '../services/api.service';
 import { NavigateBefore, NavigateNext } from '@mui/icons-material';
 
-const Calendar = ({email, studentId}) => {
+const Calendar = ({ email, studentId }) => {
     const [attendance, setAttendance] = useState([]);
     const [daysOfMonth, setDaysOfMonth] = useState([]);
     const [dateInCalendar, setDateInCalendar] = useState(new Date());
@@ -70,6 +70,16 @@ const Calendar = ({email, studentId}) => {
         getAttendanceDetails(newDate);
     }
 
+    const handleDoubleClick = (day) => {
+        console.log('Staff attendance document deletion. Update collection name if you want to delete studentAttendance document.')
+        /*Uncomment following code to delete attendance*/
+        // const docs = attendance.filter(x => x.date.getDate() === day.getDate());
+        // docs.forEach(async (item) => {
+        //     await deleteAttendance(item.id);
+        //     console.log('deleted record', item);
+        // });
+    }
+
     const formattedDate = () => {
         const dateArray = dateInCalendar ? dateInCalendar.toDateString().split(' ') : ['', '', '', ''];
         return dateArray[1] + ' ' + dateArray[3];
@@ -119,7 +129,7 @@ const Calendar = ({email, studentId}) => {
                                 {
                                     week.map((day, dayKey) => {
                                         return (
-                                            <div className={
+                                            <div onDoubleClick={() => handleDoubleClick(day)} className={
                                                 `col ` + (day ? ((present.includes(day.getDate()) ? `yes ` : ``) +
                                                     (half.includes(day.getDate()) ? `half ` : ``) +
                                                     (absent.includes(day.getDate()) ? `no ` : ``)) : ` disable`)}

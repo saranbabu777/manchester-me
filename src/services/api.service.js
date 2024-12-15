@@ -30,6 +30,11 @@ export const filterAttendance = async (email, start, end) => {
     return parsedAttendance;
 }
 
+export const deleteAttendance = async (id) => {
+    const attendanceDoc = doc(db, "attendance", id);
+    await deleteDoc(attendanceDoc)
+}
+
 /*Student Attendance Collection*/
 export const createStudentAttendance = async (attendance) => {
     const currentUserObject = localStorage.getItem('man-client-user-inf');
