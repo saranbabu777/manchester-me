@@ -1,6 +1,6 @@
 import { IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { filterAttendance } from '../services/api.service';
+import { deleteAttendance, filterAttendance } from '../services/api.service';
 import { NavigateBefore, NavigateNext } from '@mui/icons-material';
 
 const Calendar = (props) => {
@@ -70,6 +70,16 @@ const Calendar = (props) => {
         getAttendanceDetails(newDate);
     }
 
+    const handleDoubleClick = (day) => {
+        console.log('Attendance document deletion handled here.')
+        /*Uncomment following code to delete attendance*/
+        // const docs = attendance.filter(x => x.date.getDate() === day.getDate());
+        // docs.forEach(async (item) => {
+        //     await deleteAttendance(item.id);
+        //     console.log('deleted record', item);
+        // });
+    }
+
     const formattedDate = () => {
         const dateArray = dateInCalendar ? dateInCalendar.toDateString().split(' ') : ['', '', '', ''];
         return dateArray[1] + ' ' + dateArray[3];
@@ -119,7 +129,7 @@ const Calendar = (props) => {
                                 {
                                     week.map((day, dayKey) => {
                                         return (
-                                            <div className={
+                                            <div onDoubleClick={() => handleDoubleClick(day)} className={
                                                 `col ` + (day ? ((present.includes(day.getDate()) ? `yes ` : ``) +
                                                     (half.includes(day.getDate()) ? `half ` : ``) +
                                                     (absent.includes(day.getDate()) ? `no ` : ``)) : ` disable`)}
